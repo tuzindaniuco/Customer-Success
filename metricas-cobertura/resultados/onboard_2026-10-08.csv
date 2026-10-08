@@ -1,12 +1,12 @@
-empresa,interno,movimentacoes,disparados,sem_disparo,sem_workflow_configurado,cobertura_disparo_%,rejeitado,aguardando_aprovacao,executados,sucesso,erro,em_andamento,cobertura_execucao_%
-Contabilizei,False,65,64,1,0,98.5,0,0,64,26,10,28,40.6
-LG,False,33,33,0,0,100.0,0,0,33,31,2,0,93.9
-Blip,False,27,27,0,0,100.0,3,0,24,23,1,0,95.8
-OLX,False,27,0,27,0,0.0,0,0,0,0,0,0,
-Bionexo,False,13,0,13,0,0.0,0,0,0,0,0,0,
-Grancursos,False,12,0,0,12,0.0,0,0,0,0,0,0,
-Gupy,False,12,10,2,0,83.3,1,0,9,9,0,0,100.0
-Mercado Bitcoin,False,10,0,0,10,0.0,0,0,0,0,0,0,
-Hubla,False,3,2,1,0,66.7,2,0,0,0,0,0,
-Jusbrasil,False,1,0,0,1,0.0,0,0,0,0,0,0,
-Niuco (main),True,1,1,0,0,100.0,0,1,0,0,0,0,
+empresa,interno,movimentacoes,sem_disparo,sem_workflow_configurado,rejeitado,aguardando_aprovacao,disparados,cobertura_disparo_%,sucesso,erro,em_andamento,cobertura_execucao_%
+Contabilizei,False,65,1,0,0,0,64,98.5,26,10,28,40.6
+LG,False,33,0,0,0,0,33,100.0,31,2,0,93.9
+Blip,False,27,0,0,3,0,24,88.9,23,1,0,95.8
+OLX,False,27,27,0,0,0,0,0.0,0,0,0,
+Bionexo,False,13,13,0,0,0,0,0.0,0,0,0,
+Grancursos,False,12,0,12,0,0,0,0.0,0,0,0,
+Gupy,False,12,2,0,1,0,9,75.0,9,0,0,100.0
+Mercado Bitcoin,False,10,0,10,0,0,0,0.0,0,0,0,
+Hubla,False,3,1,0,2,0,0,0.0,0,0,0,
+Jusbrasil,False,1,0,1,0,0,0,0.0,0,0,0,
+Niuco (main),True,1,0,0,0,1,0,0.0,0,0,0,

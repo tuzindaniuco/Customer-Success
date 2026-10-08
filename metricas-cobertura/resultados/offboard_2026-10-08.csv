@@ -1,10 +1,10 @@
-empresa,interno,movimentacoes,disparados,sem_disparo,sem_workflow_configurado,cobertura_disparo_%,rejeitado,aguardando_aprovacao,executados,sucesso,erro,em_andamento,cobertura_execucao_%
-Contabilizei,False,56,56,0,0,100.0,0,1,55,41,14,0,74.5
-LG,False,27,27,0,0,100.0,0,0,27,22,5,0,81.5
-Gupy,False,24,24,0,0,100.0,0,2,22,20,2,0,90.9
-Blip,False,21,21,0,0,100.0,1,0,20,19,1,0,95.0
-OLX,False,21,0,21,0,0.0,0,0,0,0,0,0,
-Grancursos,False,10,9,1,0,90.0,0,4,5,5,0,0,100.0
-Bionexo,False,6,0,6,0,0.0,0,0,0,0,0,0,
-Mercado Bitcoin,False,6,6,0,0,100.0,0,0,6,5,1,0,83.3
-Hubla,False,5,5,0,0,100.0,1,0,4,4,0,0,100.0
+empresa,interno,movimentacoes,sem_disparo,sem_workflow_configurado,rejeitado,aguardando_aprovacao,disparados,cobertura_disparo_%,sucesso,erro,em_andamento,cobertura_execucao_%
+Contabilizei,False,56,0,0,0,1,55,98.2,41,14,0,74.5
+LG,False,27,0,0,0,0,27,100.0,22,5,0,81.5
+Gupy,False,24,0,0,0,2,22,91.7,20,2,0,90.9
+Blip,False,21,0,0,1,0,20,95.2,19,1,0,95.0
+OLX,False,21,21,0,0,0,0,0.0,0,0,0,
+Grancursos,False,10,1,0,0,4,5,50.0,5,0,0,100.0
+Bionexo,False,6,6,0,0,0,0,0.0,0,0,0,
+Mercado Bitcoin,False,6,0,0,0,0,6,100.0,5,1,0,83.3
+Hubla,False,5,0,0,1,0,4,80.0,4,0,0,100.0

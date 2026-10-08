@@ -56,13 +56,12 @@ def cobertura_workflow(linhas, col_data, inicio, fim):
             else:
                 c["sem_disparo"] += 1
             continue
-        c["disparados"] += 1
         executadas = [s for s in execs if s not in NAO_EXECUTADAS]
         if not executadas:
             c["rejeitado" if "Rejeitado" in execs else "aguardando_aprovacao"] += 1
             continue
-        # Vale o pior status entre as execuções que rodaram de fato.
-        c["executados"] += 1
+        # Só conta como disparo o que rodou de fato; vale o pior status entre essas execuções.
+        c["disparados"] += 1
         if any(s in COM_ERRO for s in executadas):
             c["erro"] += 1
         elif all(s == SUCESSO for s in executadas):
@@ -76,17 +75,16 @@ def cobertura_workflow(linhas, col_data, inicio, fim):
             "empresa": empresa,
             "interno": empresa in INTERNOS,
             "movimentacoes": c["movimentacoes"],
-            "disparados": c["disparados"],
             "sem_disparo": c["sem_disparo"],
             "sem_workflow_configurado": c["sem_workflow_configurado"],
-            "cobertura_disparo_%": pct(c["disparados"], c["movimentacoes"]),
             "rejeitado": c["rejeitado"],
             "aguardando_aprovacao": c["aguardando_aprovacao"],
-            "executados": c["executados"],
+            "disparados": c["disparados"],
+            "cobertura_disparo_%": pct(c["disparados"], c["movimentacoes"]),
             "sucesso": c["sucesso"],
             "erro": c["erro"],
             "em_andamento": c["em_andamento"],
-            "cobertura_execucao_%": pct(c["sucesso"], c["executados"]),
+            "cobertura_execucao_%": pct(c["sucesso"], c["disparados"]),
         })
     return sorted(saida, key=lambda r: (r["interno"], -r["movimentacoes"]))
 
