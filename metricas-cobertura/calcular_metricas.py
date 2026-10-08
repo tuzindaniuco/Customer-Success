@@ -99,41 +99,42 @@ def cobertura_workflow(linhas, col_data, inicio, fim):
     return sorted(saida, key=lambda r: (r["interno"], -r["movimentacoes"]))
 
 
+def tem_grupo_especifico(grupos):
+    """Todo mundo está em "Todos os Funcionários"; só conta grupo além dele."""
+    return any(g and not g.startswith("Todos os Funcionários") for g in grupos.split("; "))
+
+
 def cobertura_grupos(linhas):
+    """Cobertura de grupos específicos entre as pessoas na folha (é a folha que o workflow olha)."""
     por_empresa = collections.defaultdict(collections.Counter)
     for l in linhas:
         c = por_empresa[l["Company"]]
-        em_grupo = l["Em Grupo"] == "Sim"
-        c["usuarios"] += 1
-        c["usuarios_em_grupo"] += em_grupo
-        if l["Status Niuco"] == "Contratado":
-            c["contratados"] += 1
-            c["contratados_em_grupo"] += em_grupo
-            especificos = [g for g in l["Grupos"].split("; ") if g and not g.startswith("Todos os Funcionários")]
-            c["contratados_grupo_especifico"] += bool(especificos)
-            c["contratados_aciona_onboard"] += l["Aciona Onboard"] == "Sim"
-            c["contratados_aciona_offboard"] += l["Aciona Offboard"] == "Sim"
-        if l["Grupos Não Aprovados"]:
-            c["com_grupo_pendente_ou_suspenso"] += 1
+        especifico = tem_grupo_especifico(l["Grupos"])
+        c["usuarios_com_grupo_especifico"] += especifico
+        if l["Na Folha"] != "Sim":
+            continue
+        c["folha"] += 1
+        c["folha_grupo_especifico"] += especifico
+        c["folha_em_algum_grupo"] += l["Em Grupo"] == "Sim"
+        c["folha_aciona_onboard"] += l["Aciona Onboard"] == "Sim"
+        c["folha_aciona_offboard"] += l["Aciona Offboard"] == "Sim"
 
     saida = []
     for empresa, c in por_empresa.items():
+        possui = c["usuarios_com_grupo_especifico"] > 0
         saida.append({
             "empresa": empresa,
             "interno": empresa in INTERNOS,
-            "contratados": c["contratados"],
-            "contratados_em_grupo": c["contratados_em_grupo"],
-            "contratados_sem_grupo": c["contratados"] - c["contratados_em_grupo"],
-            "cobertura_grupos_contratados_%": pct(c["contratados_em_grupo"], c["contratados"]),
-            "contratados_grupo_especifico_%": pct(c["contratados_grupo_especifico"], c["contratados"]),
-            "contratados_aciona_onboard_%": pct(c["contratados_aciona_onboard"], c["contratados"]),
-            "contratados_aciona_offboard_%": pct(c["contratados_aciona_offboard"], c["contratados"]),
-            "usuarios_total": c["usuarios"],
-            "usuarios_em_grupo": c["usuarios_em_grupo"],
-            "cobertura_grupos_todos_%": pct(c["usuarios_em_grupo"], c["usuarios"]),
-            "com_grupo_pendente_ou_suspenso": c["com_grupo_pendente_ou_suspenso"],
+            "pessoas_na_folha": c["folha"],
+            "possui_grupo_especifico": "Sim" if possui else "Não",
+            "com_grupo_especifico": c["folha_grupo_especifico"],
+            "sem_grupo_especifico": c["folha"] - c["folha_grupo_especifico"] if possui else None,
+            "cobertura_grupos_especificos_%": pct(c["folha_grupo_especifico"], c["folha"]) if possui else None,
+            "em_algum_grupo_%": pct(c["folha_em_algum_grupo"], c["folha"]),
+            "aciona_onboard_%": pct(c["folha_aciona_onboard"], c["folha"]),
+            "aciona_offboard_%": pct(c["folha_aciona_offboard"], c["folha"]),
         })
-    return sorted(saida, key=lambda r: (r["interno"], -r["contratados"]))
+    return sorted(saida, key=lambda r: (r["interno"], -r["pessoas_na_folha"]))
 
 
 def cobertura_tickets(linhas, inicio, fim):
