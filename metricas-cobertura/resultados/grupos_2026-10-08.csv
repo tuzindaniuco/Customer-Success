@@ -1,0 +1,20 @@
+empresa,interno,contratados,contratados_em_grupo,contratados_sem_grupo,cobertura_grupos_contratados_%,contratados_grupo_especifico_%,contratados_aciona_onboard_%,contratados_aciona_offboard_%,usuarios_total,usuarios_em_grupo,cobertura_grupos_todos_%,com_grupo_pendente_ou_suspenso
+Contabilizei,False,1841,1841,0,100.0,100.0,57.6,100.0,2902,1841,63.4,0
+Blip,False,1185,1185,0,100.0,100.0,100.0,100.0,2227,1185,53.2,0
+OLX,False,1181,1,1180,0.1,0.1,0.0,0.0,4185,1,0.0,1181
+Grancursos,False,1009,1009,0,100.0,0.0,0.0,100.0,2606,1009,38.7,1009
+LG,False,809,809,0,100.0,100.0,100.0,99.8,1511,1403,92.9,809
+Jusbrasil,False,642,642,0,100.0,0.0,0.0,0.0,2367,642,27.1,642
+G4,False,572,572,0,100.0,100.0,33.0,100.0,954,572,60.0,0
+Sympla,False,492,0,492,0.0,0.0,0.0,0.0,2382,0,0.0,492
+Gupy,False,491,491,0,100.0,82.1,100.0,100.0,1278,491,38.4,491
+Bionexo,False,450,450,0,100.0,0.0,0.0,0.0,3690,450,12.2,447
+Mercado Bitcoin,False,330,0,330,0.0,0.0,0.0,0.0,2297,0,0.0,330
+doc9,False,238,238,0,100.0,1.7,100.0,100.0,257,238,92.6,238
+Hubla,False,113,113,0,100.0,25.7,100.0,100.0,803,113,14.1,113
+Malga,False,47,47,0,100.0,51.1,100.0,100.0,116,47,40.5,0
+Solfacil-POC,False,9,8,1,88.9,88.9,22.2,66.7,9,8,88.9,9
+Niuco Apresentacao,True,314,314,0,100.0,39.2,0.0,0.0,531,314,59.1,0
+Niuco (homolog),True,66,66,0,100.0,100.0,100.0,100.0,161,68,42.2,66
+Niuco (main),True,30,30,0,100.0,90.0,100.0,100.0,217,31,14.3,0
+CX teste,True,18,18,0,100.0,100.0,100.0,0.0,18,18,100.0,0

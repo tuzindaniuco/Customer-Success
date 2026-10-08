@@ -1,0 +1,10 @@
+empresa,interno,movimentacoes,disparados,sem_disparo,sem_workflow_configurado,cobertura_disparo_%,sucesso,erro,rejeitado,pendente,cobertura_execucao_%,execucoes,execucoes_sucesso
+Contabilizei,False,56,56,0,0,100.0,34,14,2,6,60.7,139,110
+LG,False,27,27,0,0,100.0,10,5,12,0,37.0,79,54
+Gupy,False,24,24,0,0,100.0,1,2,0,21,4.2,70,44
+Blip,False,21,21,0,0,100.0,3,1,13,4,14.3,43,24
+OLX,False,21,0,21,0,0.0,0,0,0,0,,0,0
+Grancursos,False,10,9,1,0,90.0,5,0,0,4,55.6,14,10
+Bionexo,False,6,0,6,0,0.0,0,0,0,0,,0,0
+Mercado Bitcoin,False,6,6,0,0,100.0,5,1,0,0,83.3,8,5
+Hubla,False,5,5,0,0,100.0,4,0,1,0,80.0,13,12
