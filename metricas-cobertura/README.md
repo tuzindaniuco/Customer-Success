@@ -1,11 +1,11 @@
 # Métricas de cobertura (CS)
 
 Fonte: planilha **Relatórios AM/CX 2026.Q3**, abas *Cobertura offboard*, *Cobertura onboard*, *Cobertura grupos* e *Solicitações no portal*.
-Janela: **08/09/2026 a 08/10/2026** (data base 08/10/2026, 30 dias para trás).
+Janela: **01/09/2026 a 01/10/2026**. A data base é 08/10/2026, com **7 dias de defasagem** e 30 dias de janela. A defasagem dá tempo de a fila de aprovação andar antes de medir; uma movimentação de ontem quase sempre ainda está aguardando aprovação.
 Tenants internos (Niuco main/homolog/Apresentação, CX teste) ficam fora dos totais. Os CSVs completos estão em `resultados/`.
 
 Para recalcular: exporte as 4 abas como JSON (`off.json`, `on.json`, `grp.json`, `portal.json`) numa pasta fora do repo e rode
-`python3 calcular_metricas.py <pasta> <AAAA-MM-DD>`. Os arquivos brutos têm dados pessoais e não devem ser versionados.
+`python3 calcular_metricas.py <pasta> <data base AAAA-MM-DD> [defasagem em dias, padrão 7]`. Os arquivos brutos têm dados pessoais e não devem ser versionados.
 
 ## Como cada métrica é calculada
 
@@ -20,43 +20,41 @@ Para recalcular: exporte as 4 abas como JSON (`off.json`, `on.json`, `grp.json`,
 
 | Métrica | Resultado (clientes) |
 |---|---|
-| Offboard: cobertura de disparo | **79,0%** (139 de 176 desligamentos). Não contam como disparo 7 aguardando aprovação e 2 rejeitados |
-| Offboard: cobertura de execução | **83,5%** (116 de 139 disparados) |
-| Onboard: cobertura de disparo | **64,0%** (130 de 203 admissões). Não contam como disparo 6 rejeitados |
-| Onboard: cobertura de execução | **68,5%** (89 de 130 disparados) |
+| Offboard: cobertura de disparo | **80,0%** (152 de 190 desligamentos). Não contam como disparo 7 aguardando aprovação e 2 rejeitados |
+| Offboard: cobertura de execução | **81,6%** (124 de 152 disparados) |
+| Onboard: cobertura de disparo | **61,5%** (88 de 143 admissões). Não contam como disparo 1 aguardando aprovação e 3 rejeitados |
+| Onboard: cobertura de execução | **84,1%** (74 de 88 disparados) |
 | Grupos: folha em grupo específico | **73,5%** (5.459 de 7.425) nas 10 empresas que têm grupo específico. Outras 5 empresas (3.098 pessoas na folha) não têm nenhum grupo específico |
-| Tickets: taxa de conclusão | **96,5%** (984 de 1.020). Só a LG usa o portal |
+| Tickets: taxa de conclusão | **99,6%** (1.630 de 1.637). Só a LG usa o portal |
 
 ## Offboard por empresa
 
-| Empresa | Desligamentos | Sem disparo | Rejeitado | Aguardando | Disparados | Cob. disparo | Sucesso | Erro | Cob. execução |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Contabilizei | 56 | 0 | 0 | 1 | 55 | 98,2% | 41 | 14 | 74,5% |
-| LG | 27 | 0 | 0 | 0 | 27 | 100% | 22 | 5 | 81,5% |
-| Gupy | 24 | 0 | 0 | 2 | 22 | 91,7% | 20 | 2 | 90,9% |
-| Blip | 21 | 0 | 1 | 0 | 20 | 95,2% | 19 | 1 | 95,0% |
-| OLX | 21 | 21 | 0 | 0 | 0 | 0% | – | – | – |
-| Grancursos | 10 | 1 | 0 | 4 | 5 | 50,0% | 5 | 0 | 100% |
-| Bionexo | 6 | 6 | 0 | 0 | 0 | 0% | – | – | – |
-| Mercado Bitcoin | 6 | 0 | 0 | 0 | 6 | 100% | 5 | 1 | 83,3% |
-| Hubla | 5 | 0 | 1 | 0 | 4 | 80,0% | 4 | 0 | 100% |
+| Empresa | Desligamentos | Sem disparo | Sem workflow configurado | Rejeitado | Aguardando | Disparados | Cob. disparo | Sucesso | Erro / em andamento | Cob. execução |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Contabilizei | 61 | 0 | 0 | 0 | 1 | 60 | 98,4% | 46 | 14 / 0 | 76,7% |
+| Blip | 28 | 0 | 0 | 1 | 0 | 27 | 96,4% | 25 | 2 / 0 | 92,6% |
+| Gupy | 27 | 0 | 0 | 0 | 2 | 25 | 92,6% | 20 | 5 / 0 | 80,0% |
+| OLX | 22 | 22 | 0 | 0 | 0 | 0 | 0% | – | – | – |
+| LG | 20 | 0 | 0 | 0 | 0 | 20 | 100% | 15 | 5 / 0 | 75,0% |
+| Grancursos | 12 | 1 | 0 | 0 | 4 | 7 | 58,3% | 7 | 0 / 0 | 100% |
+| Mercado Bitcoin | 9 | 0 | 0 | 0 | 0 | 9 | 100% | 7 | 2 / 0 | 77,8% |
+| Bionexo | 6 | 6 | 0 | 0 | 0 | 0 | 0% | – | – | – |
+| Hubla | 5 | 0 | 0 | 1 | 0 | 4 | 80,0% | 4 | 0 / 0 | 100% |
 
 ## Onboard por empresa
 
-| Empresa | Admissões | Sem disparo | Sem workflow configurado | Rejeitado | Disparados | Cob. disparo | Sucesso | Erro / em andamento | Cob. execução |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Contabilizei | 65 | 1 | 0 | 0 | 64 | 98,5% | 26 | 10 / 28 | 40,6% |
-| LG | 33 | 0 | 0 | 0 | 33 | 100% | 31 | 2 / 0 | 93,9% |
-| Blip | 27 | 0 | 0 | 3 | 24 | 88,9% | 23 | 1 / 0 | 95,8% |
-| OLX | 27 | 27 | 0 | 0 | 0 | 0% | – | – | – |
-| Bionexo | 13 | 13 | 0 | 0 | 0 | 0% | – | – | – |
-| Grancursos | 12 | 0 | 12 | 0 | 0 | 0% | – | – | – |
-| Gupy | 12 | 2 | 0 | 1 | 9 | 75,0% | 9 | 0 / 0 | 100% |
-| Mercado Bitcoin | 10 | 0 | 10 | 0 | 0 | 0% | – | – | – |
-| Hubla | 3 | 1 | 0 | 2 | 0 | 0% | – | – | – |
-| Jusbrasil | 1 | 0 | 1 | 0 | 0 | 0% | – | – | – |
-
-Nenhuma admissão de cliente ficou aguardando aprovação na janela.
+| Empresa | Admissões | Sem disparo | Sem workflow configurado | Rejeitado | Aguardando | Disparados | Cob. disparo | Sucesso | Erro / em andamento | Cob. execução |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Contabilizei | 30 | 1 | 0 | 0 | 0 | 29 | 96,7% | 26 | 3 / 0 | 89,7% |
+| LG | 30 | 0 | 0 | 0 | 0 | 30 | 100% | 20 | 10 / 0 | 66,7% |
+| Blip | 26 | 0 | 0 | 3 | 1 | 22 | 84,6% | 21 | 1 / 0 | 95,5% |
+| Grancursos | 15 | 0 | 15 | 0 | 0 | 0 | 0% | – | – | – |
+| OLX | 13 | 13 | 0 | 0 | 0 | 0 | 0% | – | – | – |
+| Bionexo | 12 | 12 | 0 | 0 | 0 | 0 | 0% | – | – | – |
+| Gupy | 8 | 1 | 0 | 0 | 0 | 7 | 87,5% | 7 | 0 / 0 | 100% |
+| Mercado Bitcoin | 6 | 0 | 6 | 0 | 0 | 0 | 0% | – | – | – |
+| Hubla | 2 | 2 | 0 | 0 | 0 | 0 | 0% | – | – | – |
+| Jusbrasil | 1 | 0 | 1 | 0 | 0 | 0 | 0% | – | – | – |
 
 ## Grupos por empresa (pessoas na folha)
 
@@ -82,17 +80,17 @@ Nenhuma admissão de cliente ficou aguardando aprovação na janela.
 
 | Empresa | Abertos | Concluídos | Cancelados | Em aberto | Taxa de conclusão |
 |---|---:|---:|---:|---:|---:|
-| LG | 1.020 | 984 | 4 | 32 | 96,5% |
+| LG | 1.637 | 1.630 | 5 | 2 | 99,6% |
 
-Origem dos tickets da LG na janela: 636 manuais e 384 abertos pelo sistema. Nenhum outro cliente abriu ticket no período; só houve testes internos (Niuco main 7, Apresentação 7).
+Origem dos tickets da LG na janela: 632 manuais, 390 abertos pelo sistema e 615 importados. Os importados entraram em lote e vêm já concluídos, então puxam a taxa para cima. Nenhum outro cliente abriu ticket no período; só houve testes internos.
 
 ## Leituras para o time de CS
 
 1. **OLX tem um único grupo específico, com 1 pessoa**: 1.536 pessoas da folha estão sem grupo específico, e nenhuma aciona onboard ou offboard. Isso explica o 0% de disparo da OLX nas duas métricas de workflow.
 2. **doc9 (1,7%) e Hubla (25,9%) criaram grupos específicos, mas a maior parte da folha ainda está fora deles.** Na Malga só metade da folha está num grupo específico (51,1%), e na Gupy faltam 88 pessoas (82,1%).
 3. **Grancursos, Jusbrasil, Sympla, Bionexo e Mercado Bitcoin não têm nenhum grupo específico** (3.098 pessoas na folha). Na Bionexo e na Jusbrasil o workflow não aciona para ninguém, e Grancursos, Jusbrasil e Mercado Bitcoin também nunca configuraram onboard.
-4. **Quando o workflow roda, ele costuma funcionar; a exceção é a Contabilizei.**
-   - Entre os disparados, offboard fica em 83,5% de sucesso e onboard em 68,5%.
-   - No onboard da Contabilizei, 28 de 64 pessoas ainda estão com execução em andamento e 10 deram erro, o que leva a empresa a 40,6%. Sem ela, o onboard dos clientes iria para 95,5% (63 de 66).
-   - No offboard, a Contabilizei concentra 14 dos 23 erros.
-5. **Tickets**: o portal é, na prática, uma ferramenta só da LG, que fecha quase tudo o que abre (96,5%). Para os demais clientes a funcionalidade não está em uso, o que é uma oportunidade de adoção.
+4. **A fila parada é sinal de alerta.** Mesmo com 7 dias de defasagem, ainda há desligamentos aguardando aprovação: 4 na Grancursos, 2 na Gupy e 1 na Contabilizei. Se continuarem assim, o cliente provavelmente fez o desligamento por fora da Niuco.
+5. **Entre os disparados, os erros se concentram em poucas empresas.**
+   - No offboard: Contabilizei (14), LG (5) e Gupy (5).
+   - No onboard: LG tem 10 erros em 30 admissões disparadas (66,7%).
+6. **Tickets**: o portal é, na prática, uma ferramenta só da LG. Para os demais clientes a funcionalidade não está em uso, o que é uma oportunidade de adoção.

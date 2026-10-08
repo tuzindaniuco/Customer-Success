@@ -1,0 +1,12 @@
+empresa,interno,movimentacoes,sem_disparo,sem_workflow_configurado,rejeitado,aguardando_aprovacao,disparados,cobertura_disparo_%,sucesso,erro,em_andamento,cobertura_execucao_%
+Contabilizei,False,30,1,0,0,0,29,96.7,26,3,0,89.7
+LG,False,30,0,0,0,0,30,100.0,20,10,0,66.7
+Blip,False,26,0,0,3,1,22,84.6,21,1,0,95.5
+Grancursos,False,15,0,15,0,0,0,0.0,0,0,0,
+OLX,False,13,13,0,0,0,0,0.0,0,0,0,
+Bionexo,False,12,12,0,0,0,0,0.0,0,0,0,
+Gupy,False,8,1,0,0,0,7,87.5,7,0,0,100.0
+Mercado Bitcoin,False,6,0,6,0,0,0,0.0,0,0,0,
+Hubla,False,2,2,0,0,0,0,0.0,0,0,0,
+Jusbrasil,False,1,0,1,0,0,0,0.0,0,0,0,
+Niuco (main),True,2,0,0,0,1,1,50.0,1,0,0,100.0

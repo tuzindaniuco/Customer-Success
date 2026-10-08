@@ -1,4 +1,4 @@
 empresa,interno,tickets_abertos,concluidos,cancelados,em_aberto,taxa_conclusao_%,taxa_tratados_%,fonte_manual,fonte_sistema,fonte_importado
-LG,False,1020,984,4,32,96.5,96.9,636,384,0
+LG,False,1637,1630,5,2,99.6,99.9,632,390,615
 Niuco (main),True,7,4,0,3,57.1,57.1,7,0,0
-Niuco Apresentacao,True,7,0,0,7,0.0,0.0,7,0,0
+Niuco Apresentacao,True,4,0,0,4,0.0,0.0,4,0,0

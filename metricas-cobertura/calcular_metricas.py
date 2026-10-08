@@ -5,7 +5,10 @@ Fonte: planilha "Relatórios AM/CX 2026.Q3" (Google Sheets), abas
 "Solicitações no portal", exportadas como JSON {"values": [[...], ...]}.
 
 Uso:
-    python3 calcular_metricas.py <pasta_com_jsons> [data_base AAAA-MM-DD]
+    python3 calcular_metricas.py <pasta_com_jsons> [data_base AAAA-MM-DD] [defasagem_dias]
+
+A janela tem 30 dias e termina em data_base - defasagem (padrão 7 dias), para
+dar tempo de a fila de aprovação andar antes de medir.
 
 Os JSONs (off.json, on.json, grp.json, portal.json) têm dados pessoais e
 não são versionados. Só os agregados por empresa vão para o repositório.
@@ -164,7 +167,9 @@ def gravar_csv(caminho, linhas):
 def main():
     pasta = sys.argv[1]
     base = dt.date.fromisoformat(sys.argv[2]) if len(sys.argv) > 2 else dt.date.today()
-    inicio, fim = (base - dt.timedelta(days=30)).isoformat(), base.isoformat()
+    defasagem = int(sys.argv[3]) if len(sys.argv) > 3 else 7
+    fim_dt = base - dt.timedelta(days=defasagem)
+    inicio, fim = (fim_dt - dt.timedelta(days=30)).isoformat(), fim_dt.isoformat()
     destino = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resultados")
     os.makedirs(destino, exist_ok=True)
 
