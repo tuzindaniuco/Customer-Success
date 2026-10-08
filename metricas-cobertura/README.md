@@ -94,3 +94,11 @@ Origem dos tickets da LG na janela: 632 manuais, 390 abertos pelo sistema e 615 
    - No offboard: Contabilizei (14), LG (5) e Gupy (5).
    - No onboard: LG tem 10 erros em 30 admissões disparadas (66,7%).
 6. **Tickets**: o portal é, na prática, uma ferramenta só da LG. Para os demais clientes a funcionalidade não está em uso, o que é uma oportunidade de adoção.
+
+## Base diária para o Looker
+
+A aba **Base cobertura diária** da planilha tem uma linha por dia, empresa e tipo (Onboard/Admissão ou Offboard/Demissão), calculada por uma única fórmula em A2 a partir das abas de origem. Colunas: Data, Empresa, Ação, Tipo, Movimentações, Disparos, Rejeitados, Aguardando aprovação, Sem disparo e Sucesso. Cada pessoa conta uma vez por dia, com a mesma regra da aba Métricas CS.
+
+No Looker, as coberturas devem ser campos calculados sobre as somas, nunca médias de percentuais diários:
+- Cobertura de disparo = `SUM(Disparos) / SUM(Movimentações)`
+- Cobertura de execução = `SUM(Sucesso) / SUM(Disparos)`
