@@ -97,7 +97,12 @@ Origem dos tickets da LG na janela: 632 manuais, 390 abertos pelo sistema e 615 
 
 ## Base diária para o Looker
 
-A aba **Base cobertura diária** da planilha tem uma linha por dia, empresa e tipo (Onboard/Admissão ou Offboard/Demissão), calculada por uma única fórmula em A2 a partir das abas de origem. Só entram movimentações a partir de 01/01/2026, incluindo datas futuras já agendadas no organograma. Colunas: Data, Empresa, Ação, Tipo, Movimentações, Disparos, Rejeitados, Aguardando aprovação, Sem disparo e Sucesso. Cada pessoa conta uma vez por dia, com a mesma regra da aba Métricas CS.
+A aba **Base cobertura diária** tem uma linha por dia, empresa e tipo (Onboard/Admissão ou Offboard/Demissão), a partir de 01/01/2026, incluindo datas futuras já agendadas no organograma. Ela se atualiza sozinha quando entram dados novos nas abas de origem:
+
+- **Base por pessoa** (aba oculta): uma linha por pessoa, dia e tipo, com o resultado da pessoa (Sucesso, Erro ou em andamento, Rejeitado, Aguardando aprovação, Sem disparo). É ela que garante que cada pessoa conte uma vez.
+- **Base cobertura diária**: A2 gera as chaves (Data, Empresa, Ação, Tipo) e cada coluna numérica (Movimentações, Disparos, Rejeitados, Aguardando aprovação, Sem disparo, Sucesso) é um `MAP` que conta pessoas na aba auxiliar.
+
+A planilha está em `pt_BR`, então as fórmulas usam `;` como separador. Não digite nada abaixo da tabela, porque isso bloqueia a expansão dos resultados.
 
 No Looker, as coberturas devem ser campos calculados sobre as somas, nunca médias de percentuais diários:
 - Cobertura de disparo = `SUM(Disparos) / SUM(Movimentações)`
