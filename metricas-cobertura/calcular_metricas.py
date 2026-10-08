@@ -20,18 +20,9 @@ import sys
 INTERNOS = {"Niuco (main)", "Niuco (homolog)", "Niuco Apresentacao", "CX teste"}
 
 SUCESSO = "Concluído com sucesso"
-PENDENTES = {"Aguardando aprovação", "Em andamento"}
-# Ordem de gravidade para resumir várias execuções da mesma pessoa
-# (o pior status define o resultado da pessoa).
-GRAVIDADE = [
-    "Falhou",
-    "Concluído com erros",
-    "Em andamento com erros",
-    "Rejeitado",
-    "Aguardando aprovação",
-    "Em andamento",
-    SUCESSO,
-]
+# Execuções que não rodaram de fato: ficam fora da cobertura de execução.
+NAO_EXECUTADAS = {"Aguardando aprovação", "Rejeitado"}
+COM_ERRO = {"Falhou", "Concluído com erros", "Em andamento com erros"}
 SEM_EXECUCAO = {"Sem workflow", "Anterior ao offboard", "Anterior ao onboard"}
 
 
@@ -66,17 +57,18 @@ def cobertura_workflow(linhas, col_data, inicio, fim):
                 c["sem_disparo"] += 1
             continue
         c["disparados"] += 1
-        pior = min(execs, key=GRAVIDADE.index)
-        if pior == SUCESSO:
-            c["sucesso"] += 1
-        elif pior in PENDENTES:
-            c["pendente"] += 1
-        elif pior == "Rejeitado":
-            c["rejeitado"] += 1
-        else:
+        executadas = [s for s in execs if s not in NAO_EXECUTADAS]
+        if not executadas:
+            c["rejeitado" if "Rejeitado" in execs else "aguardando_aprovacao"] += 1
+            continue
+        # Vale o pior status entre as execuções que rodaram de fato.
+        c["executados"] += 1
+        if any(s in COM_ERRO for s in executadas):
             c["erro"] += 1
-        c["execucoes"] += len(execs)
-        c["execucoes_sucesso"] += sum(s == SUCESSO for s in execs)
+        elif all(s == SUCESSO for s in executadas):
+            c["sucesso"] += 1
+        else:
+            c["em_andamento"] += 1
 
     saida = []
     for empresa, c in por_empresa.items():
@@ -88,13 +80,13 @@ def cobertura_workflow(linhas, col_data, inicio, fim):
             "sem_disparo": c["sem_disparo"],
             "sem_workflow_configurado": c["sem_workflow_configurado"],
             "cobertura_disparo_%": pct(c["disparados"], c["movimentacoes"]),
+            "rejeitado": c["rejeitado"],
+            "aguardando_aprovacao": c["aguardando_aprovacao"],
+            "executados": c["executados"],
             "sucesso": c["sucesso"],
             "erro": c["erro"],
-            "rejeitado": c["rejeitado"],
-            "pendente": c["pendente"],
-            "cobertura_execucao_%": pct(c["sucesso"], c["disparados"]),
-            "execucoes": c["execucoes"],
-            "execucoes_sucesso": c["execucoes_sucesso"],
+            "em_andamento": c["em_andamento"],
+            "cobertura_execucao_%": pct(c["sucesso"], c["executados"]),
         })
     return sorted(saida, key=lambda r: (r["interno"], -r["movimentacoes"]))
 

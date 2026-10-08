@@ -10,13 +10,13 @@
    "sem_disparo": 0,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 100.0,
-   "sucesso": 34,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 1,
+   "executados": 55,
+   "sucesso": 41,
    "erro": 14,
-   "rejeitado": 2,
-   "pendente": 6,
-   "cobertura_execucao_%": 60.7,
-   "execucoes": 139,
-   "execucoes_sucesso": 110
+   "em_andamento": 0,
+   "cobertura_execucao_%": 74.5
   },
   {
    "empresa": "LG",
@@ -26,13 +26,13 @@
    "sem_disparo": 0,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 100.0,
-   "sucesso": 10,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 0,
+   "executados": 27,
+   "sucesso": 22,
    "erro": 5,
-   "rejeitado": 12,
-   "pendente": 0,
-   "cobertura_execucao_%": 37.0,
-   "execucoes": 79,
-   "execucoes_sucesso": 54
+   "em_andamento": 0,
+   "cobertura_execucao_%": 81.5
   },
   {
    "empresa": "Gupy",
@@ -42,13 +42,13 @@
    "sem_disparo": 0,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 100.0,
-   "sucesso": 1,
-   "erro": 2,
    "rejeitado": 0,
-   "pendente": 21,
-   "cobertura_execucao_%": 4.2,
-   "execucoes": 70,
-   "execucoes_sucesso": 44
+   "aguardando_aprovacao": 2,
+   "executados": 22,
+   "sucesso": 20,
+   "erro": 2,
+   "em_andamento": 0,
+   "cobertura_execucao_%": 90.9
   },
   {
    "empresa": "Blip",
@@ -58,13 +58,13 @@
    "sem_disparo": 0,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 100.0,
-   "sucesso": 3,
+   "rejeitado": 1,
+   "aguardando_aprovacao": 0,
+   "executados": 20,
+   "sucesso": 19,
    "erro": 1,
-   "rejeitado": 13,
-   "pendente": 4,
-   "cobertura_execucao_%": 14.3,
-   "execucoes": 43,
-   "execucoes_sucesso": 24
+   "em_andamento": 0,
+   "cobertura_execucao_%": 95.0
   },
   {
    "empresa": "OLX",
@@ -74,13 +74,13 @@
    "sem_disparo": 21,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 0.0,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 0,
+   "executados": 0,
    "sucesso": 0,
    "erro": 0,
-   "rejeitado": 0,
-   "pendente": 0,
-   "cobertura_execucao_%": null,
-   "execucoes": 0,
-   "execucoes_sucesso": 0
+   "em_andamento": 0,
+   "cobertura_execucao_%": null
   },
   {
    "empresa": "Grancursos",
@@ -90,13 +90,13 @@
    "sem_disparo": 1,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 90.0,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 4,
+   "executados": 5,
    "sucesso": 5,
    "erro": 0,
-   "rejeitado": 0,
-   "pendente": 4,
-   "cobertura_execucao_%": 55.6,
-   "execucoes": 14,
-   "execucoes_sucesso": 10
+   "em_andamento": 0,
+   "cobertura_execucao_%": 100.0
   },
   {
    "empresa": "Bionexo",
@@ -106,13 +106,13 @@
    "sem_disparo": 6,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 0.0,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 0,
+   "executados": 0,
    "sucesso": 0,
    "erro": 0,
-   "rejeitado": 0,
-   "pendente": 0,
-   "cobertura_execucao_%": null,
-   "execucoes": 0,
-   "execucoes_sucesso": 0
+   "em_andamento": 0,
+   "cobertura_execucao_%": null
   },
   {
    "empresa": "Mercado Bitcoin",
@@ -122,13 +122,13 @@
    "sem_disparo": 0,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 100.0,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 0,
+   "executados": 6,
    "sucesso": 5,
    "erro": 1,
-   "rejeitado": 0,
-   "pendente": 0,
-   "cobertura_execucao_%": 83.3,
-   "execucoes": 8,
-   "execucoes_sucesso": 5
+   "em_andamento": 0,
+   "cobertura_execucao_%": 83.3
   },
   {
    "empresa": "Hubla",
@@ -138,13 +138,13 @@
    "sem_disparo": 0,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 100.0,
+   "rejeitado": 1,
+   "aguardando_aprovacao": 0,
+   "executados": 4,
    "sucesso": 4,
    "erro": 0,
-   "rejeitado": 1,
-   "pendente": 0,
-   "cobertura_execucao_%": 80.0,
-   "execucoes": 13,
-   "execucoes_sucesso": 12
+   "em_andamento": 0,
+   "cobertura_execucao_%": 100.0
   }
  ],
  "onboard": [
@@ -156,13 +156,13 @@
    "sem_disparo": 1,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 98.5,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 0,
+   "executados": 64,
    "sucesso": 26,
    "erro": 10,
-   "rejeitado": 5,
-   "pendente": 23,
-   "cobertura_execucao_%": 40.6,
-   "execucoes": 90,
-   "execucoes_sucesso": 27
+   "em_andamento": 28,
+   "cobertura_execucao_%": 40.6
   },
   {
    "empresa": "LG",
@@ -172,13 +172,13 @@
    "sem_disparo": 0,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 100.0,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 0,
+   "executados": 33,
    "sucesso": 31,
    "erro": 2,
-   "rejeitado": 0,
-   "pendente": 0,
-   "cobertura_execucao_%": 93.9,
-   "execucoes": 54,
-   "execucoes_sucesso": 48
+   "em_andamento": 0,
+   "cobertura_execucao_%": 93.9
   },
   {
    "empresa": "Blip",
@@ -188,13 +188,13 @@
    "sem_disparo": 0,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 100.0,
+   "rejeitado": 3,
+   "aguardando_aprovacao": 0,
+   "executados": 24,
    "sucesso": 23,
    "erro": 1,
-   "rejeitado": 3,
-   "pendente": 0,
-   "cobertura_execucao_%": 85.2,
-   "execucoes": 60,
-   "execucoes_sucesso": 52
+   "em_andamento": 0,
+   "cobertura_execucao_%": 95.8
   },
   {
    "empresa": "OLX",
@@ -204,13 +204,13 @@
    "sem_disparo": 27,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 0.0,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 0,
+   "executados": 0,
    "sucesso": 0,
    "erro": 0,
-   "rejeitado": 0,
-   "pendente": 0,
-   "cobertura_execucao_%": null,
-   "execucoes": 0,
-   "execucoes_sucesso": 0
+   "em_andamento": 0,
+   "cobertura_execucao_%": null
   },
   {
    "empresa": "Bionexo",
@@ -220,13 +220,13 @@
    "sem_disparo": 13,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 0.0,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 0,
+   "executados": 0,
    "sucesso": 0,
    "erro": 0,
-   "rejeitado": 0,
-   "pendente": 0,
-   "cobertura_execucao_%": null,
-   "execucoes": 0,
-   "execucoes_sucesso": 0
+   "em_andamento": 0,
+   "cobertura_execucao_%": null
   },
   {
    "empresa": "Grancursos",
@@ -236,13 +236,13 @@
    "sem_disparo": 0,
    "sem_workflow_configurado": 12,
    "cobertura_disparo_%": 0.0,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 0,
+   "executados": 0,
    "sucesso": 0,
    "erro": 0,
-   "rejeitado": 0,
-   "pendente": 0,
-   "cobertura_execucao_%": null,
-   "execucoes": 0,
-   "execucoes_sucesso": 0
+   "em_andamento": 0,
+   "cobertura_execucao_%": null
   },
   {
    "empresa": "Gupy",
@@ -252,13 +252,13 @@
    "sem_disparo": 2,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 83.3,
-   "sucesso": 6,
+   "rejeitado": 1,
+   "aguardando_aprovacao": 0,
+   "executados": 9,
+   "sucesso": 9,
    "erro": 0,
-   "rejeitado": 2,
-   "pendente": 2,
-   "cobertura_execucao_%": 60.0,
-   "execucoes": 14,
-   "execucoes_sucesso": 10
+   "em_andamento": 0,
+   "cobertura_execucao_%": 100.0
   },
   {
    "empresa": "Mercado Bitcoin",
@@ -268,13 +268,13 @@
    "sem_disparo": 0,
    "sem_workflow_configurado": 10,
    "cobertura_disparo_%": 0.0,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 0,
+   "executados": 0,
    "sucesso": 0,
    "erro": 0,
-   "rejeitado": 0,
-   "pendente": 0,
-   "cobertura_execucao_%": null,
-   "execucoes": 0,
-   "execucoes_sucesso": 0
+   "em_andamento": 0,
+   "cobertura_execucao_%": null
   },
   {
    "empresa": "Hubla",
@@ -284,13 +284,13 @@
    "sem_disparo": 1,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 66.7,
+   "rejeitado": 2,
+   "aguardando_aprovacao": 0,
+   "executados": 0,
    "sucesso": 0,
    "erro": 0,
-   "rejeitado": 2,
-   "pendente": 0,
-   "cobertura_execucao_%": 0.0,
-   "execucoes": 2,
-   "execucoes_sucesso": 0
+   "em_andamento": 0,
+   "cobertura_execucao_%": null
   },
   {
    "empresa": "Jusbrasil",
@@ -300,13 +300,13 @@
    "sem_disparo": 0,
    "sem_workflow_configurado": 1,
    "cobertura_disparo_%": 0.0,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 0,
+   "executados": 0,
    "sucesso": 0,
    "erro": 0,
-   "rejeitado": 0,
-   "pendente": 0,
-   "cobertura_execucao_%": null,
-   "execucoes": 0,
-   "execucoes_sucesso": 0
+   "em_andamento": 0,
+   "cobertura_execucao_%": null
   },
   {
    "empresa": "Niuco (main)",
@@ -316,13 +316,13 @@
    "sem_disparo": 0,
    "sem_workflow_configurado": 0,
    "cobertura_disparo_%": 100.0,
+   "rejeitado": 0,
+   "aguardando_aprovacao": 1,
+   "executados": 0,
    "sucesso": 0,
    "erro": 0,
-   "rejeitado": 0,
-   "pendente": 1,
-   "cobertura_execucao_%": 0.0,
-   "execucoes": 1,
-   "execucoes_sucesso": 0
+   "em_andamento": 0,
+   "cobertura_execucao_%": null
   }
  ],
  "grupos": [
