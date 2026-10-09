@@ -13,13 +13,13 @@ Os dados em si (pessoas, e-mails, CNPJs) ficam só nas planilhas. Aqui entram ap
 | HEALTHSCORE | [NIUCO] MATRIZ DE HEALTH SCORE | https://docs.google.com/spreadsheets/d/1GFlzeH7DwUai_8Qg9KrlNbshhCH65M33nnnyZkvTH7Q | Cálculo do Health Score por empresa |
 | AM/TAM | [AM/TAM] DATABASE | https://docs.google.com/spreadsheets/d/14DEUkFlQrv0AYmc-1sihIwFbWiicBdseMbGPvaGqUjE | Carteira, OKRs, KPIs, projetos, pesquisa de satisfação |
 
-Fluxo geral: a CARTEIRA do INTERNO é um `IMPORTRANGE` da aba `carteira` do AM/TAM. O HEALTHSCORE tem as abas Fonte e Carteira (ocultas) e usa métricas que vêm do INTERNO (workflows, logins, compliance, contratos); a ligação exata ainda não foi mapeada. O FINANCEIRO é a fonte de cobrança (faturas e contratos); o número de funcionários da carteira vem do COMPANIES_HISTORIC.
+Fluxo geral: a CARTEIRA do INTERNO é um `IMPORTRANGE` da aba `carteira` do AM/TAM. O HEALTHSCORE tem as abas Fonte e Carteira (ocultas) e usa métricas que vêm do INTERNO (workflows, logins, compliance, contratos); a ligação exata ainda não foi mapeada. O FINANCEIRO é a fonte de cobrança (faturas e contratos); o número de funcionários da carteira vem da FATURA (coluna Funcionários, sem parceiros).
 
 ## FINANCEIRO ([NIUCO] COBRANÇA)
 
 Abas visíveis:
 
-- **FATURA** (cobrança mensal; não é a fonte do número de funcionários da carteira): uma linha por empresa por mês. Colunas: ID Empresa, Empresa, Data Referência, Funcionários, Parceiros, Gastos Adicionais, Crédito, Data de vencimento, Data de pagamento, Licenças Total, Valor, Multa, Juros, Juros Cartão, Add-On, Mora Anterior, Variação Licenças, Fatura, Variação Fatura, Dias em atraso, Pago, Status. `Data Referência` é data real (primeiro dia do mês). Meses recentes podem estar sem `Funcionários`.
+- **FATURA** (cobrança mensal; fonte do número de funcionários da carteira, coluna Funcionários): uma linha por empresa por mês. Colunas: ID Empresa, Empresa, Data Referência, Funcionários, Parceiros, Gastos Adicionais, Crédito, Data de vencimento, Data de pagamento, Licenças Total, Valor, Multa, Juros, Juros Cartão, Add-On, Mora Anterior, Variação Licenças, Fatura, Variação Fatura, Dias em atraso, Pago, Status. `Data Referência` é data real (primeiro dia do mês). Meses recentes podem estar sem `Funcionários`.
 - **CARTEIRA**: mesma carteira do AM/TAM, com colunas extras de cobrança.
 - **DADOS_COBRANÇA**: cadastro de cobrança por empresa (CNPJ, modo de cobrança, limite de licenças, % de uso, piso, valor fixo, valor por usuário, add-on fixo, multa, juros, fim do contrato, dia de pagamento).
 - **FATURAMENTO HISTÓRICO**: Data Referência, Empresa, Valor, NPS, Fase, Plano, Produto.
@@ -30,7 +30,7 @@ Abas visíveis:
 
 ## INTERNO ([NIUCO] DATABASE)
 
-- **CARTEIRA**: importa a carteira do AM/TAM. A coluna **Funcionários** (BC) é preenchida por fórmula a partir do `Hired` do COMPANIES_HISTORIC (ver "Regras e decisões").
+- **CARTEIRA**: importa a carteira do AM/TAM. A coluna **Funcionários** (BC) é preenchida por fórmula a partir da FATURA do FINANCEIRO (ver "Regras e decisões").
 - **WORKFLOWS**: um snapshot por workflow por dia de execução, com contadores acumulados (Erros, Falhas, Na Fila, Sucesso, Execuções, Iniciados, Concluídos) e deltas contra o snapshot anterior (`Delta Iniciados`, `Delta Success`, `Delta Failed`, `Delta Fila`, `Delta Rejected`, `Delta Aborted`, `Delta Success Rate`). Tipos: ONBOARD, OFFBOARD, ABSENT, MOVE, IDENTITY_SCREENING.
 - **SUCCESS RATE WORKFLOW** e **SUCCESS RATE BOTTON**: Week, TAM, Plano, Empresa, Data, Tipo, Iniciados, Sucessos, Eficiência, Projeto. Agregam os deltas de WORKFLOWS em janela móvel de cerca de 31 dias, atualizada às sextas (datas da aba APOIO). `SUCCESS RATE BOTTON` é a versão do botão de offboard.
 - **ADOÇÃO SCORE**: por semana, Success Rate (onboarding, offboarding, F&A, move, pré-folha), cobertura de onboarding e offboarding e Adoção Score, com deltas.
@@ -63,13 +63,13 @@ Abas visíveis:
 
 **Comparação entre fontes de execução (08/05 a 09/10/2026, 8 empresas, onboard e offboard).** O índice (deltas de WORKFLOWS) tem 2.053 iniciados e 1.504 sucessos (73%). A aba `Cobertura offboard` e `Cobertura onboard` do relatório AM/CX (uma linha por pessoa, por Data Execução) tem cerca de 2.096 iniciados e 1.592 sucessos (76%). A Base cobertura diária tem 1.295 e 956 (74%) e parece subconjunto: faltam execuções em LG onboard, Blip onboard e Hubla offboard. O índice conta execuções; a Cobertura conta pessoas com status final. Em nível agregado batem, por empresa divergem nos dois sentidos. A decisão do time é manter o delta do índice para acompanhamento diário; usar a Cobertura quando precisar do número por pessoa, com lastro auditável.
 
-**Número de funcionários da CARTEIRA = só contratados (Hired).** Decisão de 09/10/2026. A FATURA traz Funcionários e Parceiros, mas para a análise do Customer Care só contam os contratados. A coluna `Funcionários` (BC) do INTERNO usa o `Hired` do snapshot mais recente de cada empresa no COMPANIES_HISTORIC:
+**Número de funcionários da CARTEIRA = coluna Funcionários da FATURA, sem parceiros.** Decisão de 09/10/2026. Na FATURA, `Funcionários` (coluna D) e `Parceiros` (coluna E) são separados e `Licenças Total` (coluna J) é a soma dos dois. Para a análise do Customer Care só contam os funcionários, então a coluna `Funcionários` (BC) do INTERNO usa o último valor preenchido de `Funcionários` da FATURA de cada empresa, nunca `Licenças Total` nem `Parceiros`:
 
 ```
-=MAP(D2:D; LAMBDA(empresa; IF(empresa=""; ""; IFNA(INDEX(SORT(FILTER(COMPANIES_HISTORIC!G2:G; COMPANIES_HISTORIC!D2:D=empresa); FILTER(COMPANIES_HISTORIC!A2:A; COMPANIES_HISTORIC!D2:D=empresa); FALSE); 1); ""))))
+=LET(fatura; IMPORTRANGE("https://docs.google.com/spreadsheets/d/1UF5-sbh0xbhyeXkBpG3pOJliPfiO15IRYGnMdBXlAeY/edit"; "FATURA!B2:D"); empresas; INDEX(fatura; ; 1); datas; INDEX(fatura; ; 2); funcionarios; INDEX(fatura; ; 3); MAP(D2:D; LAMBDA(empresa; IF(empresa=""; ""; IFNA(INDEX(SORT(FILTER(funcionarios; empresas=empresa; funcionarios<>""); FILTER(datas; empresas=empresa; funcionarios<>""); FALSE); 1); "")))))
 ```
 
-A fórmula ordena pela Data Execução e devolve o `Hired` da linha mais recente. Empresas fora do histórico (Idwall, Alura, Buser) e Conta Azul (último snapshot sem Hired) ficam em branco. Limites conhecidos: o Hired não conta ausentes (LG tem 1.337 de Hired contra 1.411 em `#Funcionários`); a Sympla tem snapshot `UNKNOWN`, então o Hired é 0; Asaas, DOT Digital Group, Logcomex e Kenlo têm snapshot mais antigo que o de 09/10. Não usar o `Funcionários` da FATURA (mistura contratados e parceiros na cobrança). Essa fórmula não depende de `IMPORTRANGE`.
+A fórmula ordena pela Data Referência e devolve o `Funcionários` da fatura mais recente com valor; se o mês mais novo estiver em branco, usa o anterior. Empresas sem fatura (Idwall, Alura, Buser) ficam em branco. Empresas sem fatura recente trazem um mês antigo (Asaas e Logcomex em set/2026, Conta Azul em mai/2026, Kenlo em abr/2026). O primeiro uso exige abrir o INTERNO e clicar em "Permitir acesso" no `IMPORTRANGE`; sem isso a coluna mostra `#REF!`. Alternativa descartada: o `Hired` do COMPANIES_HISTORIC, que não conta ausentes e vem 0 quando o snapshot é `UNKNOWN` (Sympla).
 
 **Nomes de empresa divergem entre abas** (G4 e Grancursos, Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas, mas G4 e Grancursos exigem mapeamento manual. `Solfacil-POC` não é a Solfacil.
 

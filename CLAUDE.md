@@ -4,7 +4,7 @@
 
 - Os bancos de dados internos do Customer Care são quatro planilhas: FINANCEIRO, INTERNO, HEALTHSCORE e AM/TAM. Mapa, abas, colunas e regras em `bases-de-dados/README.md`.
 - Leia esse arquivo antes de mexer em qualquer uma delas. Ao receber nova informação sobre as planilhas (aba, coluna, regra, decisão), atualize-o na mesma conversa.
-- Número de funcionários por empresa na CARTEIRA: só os contratados, ou seja, o `Hired` mais recente do COMPANIES_HISTORIC. Não usar o `Funcionários` da FATURA, que mistura parceiros.
+- Número de funcionários por empresa na CARTEIRA: coluna `Funcionários` da aba FATURA do FINANCEIRO (fatura mais recente com valor), sem parceiros. Nunca somar `Parceiros` nem usar `Licenças Total`.
 
 ## Padrão de nome das conversas
 
