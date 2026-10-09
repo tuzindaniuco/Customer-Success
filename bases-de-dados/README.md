@@ -86,7 +86,7 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 
 ### Problemas conhecidos (09/10/2026)
 
-- **Health Score em erro.** No Consolidado da MATRIZ, HealthScore e Health Score Ponderado estão em `#N/A` e Engajamento em `#VALUE!` para todas as empresas; o OKR AM KRA1 herda o erro. A aba Métricas tem 18 códigos (sem E02) e o Consolidado tem 19 colunas de métrica, então os `XLOOKUP` comparam listas de tamanhos diferentes. A Tendência tem valores sem erro até 02/10/2026.
+- **Health Score em erro enquanto o Engajamento está em construção.** No Consolidado da MATRIZ, HealthScore e Health Score Ponderado ficam em `#N/A` e Engajamento em `#VALUE!` (o OKR AM KRA1 herda o erro) porque a aba Métricas ainda não tem a linha E02. É esperado: as métricas de Engajamento ainda estão sendo construídas (confirmado em 09/10/2026). A Tendência tem valores sem erro até 02/10/2026; evitar gravar semanas com erro.
 - **HS COMPLETO não reproduz a nota** em A03 (Sec Automation), A06, A07, C01, C02, C03 e E02; E01 não está na aba; a Matriz usa o código `C05N` no lugar de `C05B`, então o Bruto de C05 não chega ao Details.
 - **Métrica vazia vale 0 no ponderado.** Exemplo: sem NPS, uma empresa Sec Automation perde os 5 pontos de E02; Malga e G4 Educação ficam com cerca de metade do peso vazio.
 - **C04 sem teto** (Malga 104%).
