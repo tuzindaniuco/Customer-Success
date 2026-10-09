@@ -34,6 +34,7 @@ Abas visíveis:
 - **WORKFLOWS**: um snapshot por workflow por dia de execução, com contadores acumulados (Erros, Falhas, Na Fila, Sucesso, Execuções, Iniciados, Concluídos) e deltas contra o snapshot anterior (`Delta Iniciados`, `Delta Success`, `Delta Failed`, `Delta Fila`, `Delta Rejected`, `Delta Aborted`, `Delta Success Rate`). Tipos: ONBOARD, OFFBOARD, ABSENT, MOVE, IDENTITY_SCREENING.
 - **SUCCESS RATE WORKFLOW** e **SUCCESS RATE BOTTON**: Week, TAM, Plano, Empresa, Data, Tipo, Iniciados, Sucessos, Eficiência, Projeto. Agregam os deltas de WORKFLOWS em janela móvel de cerca de 31 dias, atualizada às sextas (datas da aba APOIO). `SUCCESS RATE BOTTON` é a versão do botão de offboard.
 - **ADOÇÃO SCORE**: por semana, Success Rate (onboarding, offboarding, F&A, move, pré-folha), cobertura de onboarding e offboarding e Adoção Score, com deltas.
+- **FAIXAS HS**: faixas de pontuação das métricas A09, A10 e A11 do HEALTHSCORE (limite em % dos funcionários e pontos).
 - **COMPANIES**: uma linha por empresa (compliance, passo de onboarding, organograma, autorização, SSO, feature flags, funcionários, suporte).
 - **COMPANIES_HISTORIC**: snapshot por empresa por data (`Data Execução` é data real). `Funcionários` traz um JSON por status; `#Funcionários` soma sem FIRED; `Hired`, `Absence` e `Fired` vêm separados, com os respectivos deltas.
 - **COBERTURA**: Data, Empresa, Ação, Tipo, Movimentações, Disparos, Rejeitados, Aguardando aprovação, Sem disparo, Sucesso. Tem as mesmas colunas da "Base cobertura diária" do relatório AM/CX (confirmar se é espelho; `metricas-cobertura/` neste repositório calcula a partir das abas de cobertura).
@@ -70,6 +71,28 @@ Abas visíveis:
 ```
 
 A fórmula ordena pela Data Referência e devolve o `Funcionários` da fatura mais recente com valor; se o mês mais novo estiver em branco, usa o anterior. Empresas sem fatura (Idwall, Alura, Buser) ficam em branco. Empresas sem fatura recente trazem um mês antigo (Asaas e Logcomex em set/2026, Conta Azul em mai/2026, Kenlo em abr/2026). O primeiro uso exige abrir o INTERNO e clicar em "Permitir acesso" no `IMPORTRANGE`; sem isso a coluna mostra `#REF!`. Alternativa descartada: o `Hired` do COMPANIES_HISTORIC, que não conta ausentes e vem 0 quando o snapshot é `UNKNOWN` (Sympla).
+
+**Health Score: A09, A10 e A11 por faixas de proporção (aplicado em 09/10/2026).** As colunas `Usuários com E-mail pessoal`, `Desligados com Acesso` e `Desligados que acessaram` da aba HEALTHSCORE do INTERNO deixaram de usar percentil (`1 - PERCENTRANK`) e passaram a usar a proporção infratores ÷ `Funcionários` da CARTEIRA (coluna BC, que vem da FATURA), convertida em pontos por faixas. As faixas ficam na aba `FAIXAS HS` do INTERNO, editáveis, e as fórmulas leem essa aba. Cada faixa vale até o limite, inclusive; acima do último limite a pontuação é 0.
+
+| Pontos | E-mail pessoal | Desligados com acesso | Desligados que acessaram |
+|---|---|---|---|
+| 100% | até 1% | até 2% | 0% |
+| 80% | até 3% | até 5% | |
+| 70% | | | até 0,5% |
+| 60% | até 5% | até 10% | |
+| 40% | até 10% | até 20% | até 1% |
+| 20% | até 20% | até 30% | até 2% |
+| 10% | | até 50% | |
+| 0% | acima de 20% | acima de 50% | acima de 2% |
+
+Pontos que valem registrar:
+- Desligados com acesso pode passar de 100% dos funcionários (Bionexo 195%, Malga 128% em 09/10/2026), porque o numerador acumula ex-funcionários e o denominador é o quadro atual. O teto de 50% (acima disso, 0) foi aprovado.
+- Desligados que acessaram é 0 em todas as empresas, e isso é o dado real; todas ficam com 100%.
+- Alternativa não adotada: dividir desligados com acesso pelo total de desligados, que mede melhor a higiene de acesso (LG e OLX têm 5% a 7% dos desligados com acesso, Gupy tem 74%). Não adotada porque o histórico de desligados falha em Hubla, Jusbrasil, Sympla e Malga.
+- Empresas pequenas oscilam mais (uma pessoa na Hubla muda quase 1 ponto percentual).
+- Linhas sem funcionários na CARTEIRA ficam em branco. O denominador vem de outra fonte (FATURA) e pode ter um mês de defasagem.
+- A aba Tendência da planilha MATRIZ DE HEALTH SCORE guarda valores fixos das semanas anteriores (calculados por percentil); as semanas novas usam a escala por faixas, então as séries de A09, A10 e A11 não são comparáveis antes e depois de 09/10/2026.
+- A versão anterior das fórmulas (percentil) está no histórico de versões do Google Sheets.
 
 **Nomes de empresa divergem entre abas** (G4 e Grancursos, Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas, mas G4 e Grancursos exigem mapeamento manual. `Solfacil-POC` não é a Solfacil.
 
