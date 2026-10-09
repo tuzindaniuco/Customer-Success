@@ -12,8 +12,9 @@ Os dados em si (pessoas, e-mails, CNPJs) ficam só nas planilhas. Aqui entram ap
 | INTERNO | [NIUCO] DATABASE | https://docs.google.com/spreadsheets/d/18yYh-WBgBxrfaDVUVkjOComtjCIZmnevTu29uFVWmAM | Dados da plataforma Niuco (workflows, cobertura, logins, funcionários) |
 | HEALTHSCORE | [NIUCO] MATRIZ DE HEALTH SCORE | https://docs.google.com/spreadsheets/d/1GFlzeH7DwUai_8Qg9KrlNbshhCH65M33nnnyZkvTH7Q | Cálculo do Health Score por empresa |
 | AM/TAM | [AM/TAM] DATABASE | https://docs.google.com/spreadsheets/d/14DEUkFlQrv0AYmc-1sihIwFbWiicBdseMbGPvaGqUjE | Carteira, OKRs, KPIs, projetos, pesquisa de satisfação |
+| Legado | [PROJETO] Health Score | https://docs.google.com/spreadsheets/d/1SL5uLyBEpyVua9yExkw2tv3XHgTn12lAQIZyISjZPWw | Health Score antigo; ainda alimenta as colunas HealthScore, Adoção, Configuração e Engajamento da CARTEIRA do AM/TAM |
 
-Fluxo geral: a CARTEIRA do INTERNO é um `IMPORTRANGE` da aba `carteira` do AM/TAM. O HEALTHSCORE tem as abas Fonte e Carteira (ocultas) e usa métricas que vêm do INTERNO (workflows, logins, compliance, contratos); a ligação exata ainda não foi mapeada. O FINANCEIRO é a fonte de cobrança (faturas e contratos); o número de funcionários da carteira vem da FATURA (coluna Funcionários, sem parceiros).
+Fluxo geral: a CARTEIRA do INTERNO é um `IMPORTRANGE` da aba `carteira` do AM/TAM. A MATRIZ DE HEALTH SCORE importa as notas por métrica do INTERNO (tabelas `healthscore` e `hsbruto`) e aplica os pesos; o fluxo completo está em "Health Score: como o cálculo flui". O FINANCEIRO é a fonte de cobrança (faturas e contratos); o número de funcionários da carteira vem da FATURA (coluna Funcionários, sem parceiros).
 
 ## FINANCEIRO ([NIUCO] COBRANÇA)
 
@@ -43,10 +44,54 @@ Abas visíveis:
 
 ## HEALTHSCORE ([NIUCO] MATRIZ DE HEALTH SCORE)
 
-- **Métricas**: dicionário dos critérios. Adoção: A01 Login Frequência (logins únicos/22), A02 a A05 eficiência de workflow (onboarding, offboarding, absence, move; média de sucesso dos últimos 30 dias), A06 e A07 cobertura de onboarding e offboarding, A08 providers homologados, A09 a A11 e-mail pessoal, desligados com acesso e desligados que acessaram (percentil, menor é melhor). Configuração: C01 a C06. Engajamento: E01 e E02 (satisfação).
+- **Métricas**: dicionário dos critérios. Adoção: A01 Login Frequência (logins únicos/22), A02 a A05 eficiência de workflow (onboarding, offboarding, absence, move; média de sucesso dos últimos 30 dias), A06 e A07 cobertura de onboarding e offboarding, A08 providers homologados, A09 a A11 e-mail pessoal, desligados com acesso e desligados que acessaram (faixas de proporção desde 09/10/2026; a descrição na aba ainda fala em percentil). Configuração: C01 a C06. Engajamento: E01 (satisfação DM/EB, do HAPPYSCORE). A linha E02 (NPS) não existe na aba em 09/10/2026, embora Pesos, Categorias e Consolidado tenham E02 (ver "Problemas conhecidos").
 - **Pesos** e **Categorias**: peso de cada critério por plano (FinOPs, Sec Automation, Identity Managment, Ultimate, Sec Automation Gran) e por categoria.
 - **Matriz**, **Details**, **Consolidado**, **Tendência** (semanal): pontuação por empresa, `HealthScore` e `Health Score Ponderado`, com Adoção, Configuração e Engajamento.
 - Ocultas: Fonte, Calculadora, Carteira.
+
+## Health Score: como o cálculo flui
+
+Mapeado em 09/10/2026 a partir das fórmulas.
+
+1. **Ingestão (INTERNO).** Make grava as abas brutas: WORKFLOWS, LOGINS, COMPLIANCE, PROVIDERS (oculta), CONTRATOS, GROUPS, COMPANIES, COMPANIES_HISTORIC. COBERTURA e COBERTURA GRUPOS são `IMPORTRANGE` do relatório AM/CX; CARTEIRA é `IMPORTRANGE` do AM/TAM.
+2. **Transformação (INTERNO).** WORKFLOWS calcula os deltas entre snapshots. SUCCESS RATE WORKFLOW (tabela `adoção_sr`) soma os deltas em janela de 31 dias para cada sexta da aba APOIO. SUCCESS RATE BOTTON (`srbotton`) faz o mesmo com Disparos e Sucesso da COBERTURA, só para o plano Sec Automation. ADOÇÃO SCORE (`scoreadocao`) junta eficiência e cobertura por semana; a cobertura é disparos ÷ movimentações numa janela de 30 dias que termina 7 dias antes da sexta. GRUPOS calcula a cobertura de grupos específicos a partir da COBERTURA GRUPOS.
+3. **Nota por métrica (INTERNO, aba HEALTHSCORE, tabela `healthscore`).** Uma coluna por métrica, de 0 a 1. As empresas (A e B) são digitadas.
+4. **HS Bruto (INTERNO, aba HS COMPLETO, tabela `hsbruto`).** Para cada métrica, `Bruto` (valor de origem) e `Máximo` (valor de Bruto que daria 100%), seguidos das notas.
+5. **Ponderação (MATRIZ).** Fonte importa `healthscore`. Consolidado (tabela `metrics`) tira as empresas com Projeto = Implantação, calcula E01 (HAPPYSCORE mais recente ÷ 10) e E02 (NPS da CARTEIRA convertido para 0 a 1: (NPS ÷ 100 + 1) ÷ 2) e gera HealthScore (média simples), Health Score Ponderado (Pesos por plano) e Adoção, Configuração e Engajamento (Categorias). Matriz transpõe a HS COMPLETO com códigos digitados (A01B = bruto, A01M = máximo, A01 = nota). Details cruza métrica × empresa com Peso, Pontuação, Bruto e Máximo. Calculadora (oculta) é uma cópia do Consolidado para testes. Tendência guarda o Consolidado por semana, como valores fixos.
+6. **Consumo (AM/TAM).** CONSOLIDADO importa a tabela `metrics` da MATRIZ. OKR AM KRA1 é a média do Health Score Ponderado; OKR TAM KRT1 e KRT2 são as médias de Configuração e Adoção. As colunas HealthScore, Adoção, Configuração e Engajamento da CARTEIRA não vêm da MATRIZ: vêm da planilha legada [PROJETO] Health Score, aba Tratadão proporcional.
+
+| Código | Métrica | Nota (HEALTHSCORE) | Bruto / Máximo (HS COMPLETO) |
+|---|---|---|---|
+| A01 | Login frequência | maior % de acesso de um único usuário nos últimos 30 dias (dias únicos ÷ 22) | dias únicos do usuário mais ativo / 22 |
+| A02 | Eficiência onboarding | Δ sucesso ÷ Δ iniciados de WORKFLOWS, últimos 30 dias (a partir de 16/04/2026) | Δ sucesso / Δ iniciados |
+| A03 | Eficiência offboarding | ADOÇÃO SCORE da sexta mais recente (botão para Sec Automation, WORKFLOWS para os demais) | Δ sucesso / Δ iniciados de WORKFLOWS; vazio para Sec Automation |
+| A04 | Eficiência absent | WORKFLOWS, a partir de 04/08/2026 | Δ sucesso / Δ iniciados |
+| A05 | Eficiência move | WORKFLOWS | Δ sucesso / Δ iniciados |
+| A06 | Cobertura onboarding | ADOÇÃO SCORE: disparos ÷ admissões | Bruto copiado de A02; Máximo com `#REF!` |
+| A07 | Cobertura offboarding | ADOÇÃO SCORE: disparos ÷ demissões | Bruto copiado de A03; Máximo com `#REF!` |
+| A08 | Providers homologados | homologados ÷ fornecedores | homologados / fornecedores |
+| A09 | E-mail pessoal | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
+| A10 | Desligados com acesso | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
+| A11 | Desligados que acessaram | faixas da FAIXAS HS | infratores / teto (0) |
+| C01 | Configuração de workflow | tipos distintos de workflow ÷ 2 (1 para Gran Cursos), limitado a 100% | tipos / 2 (3 para Contabilizei) |
+| C02 | Cobertura de grupos | GRUPOS: pessoas na folha em grupo específico ÷ pessoas na folha | workflows de onboarding com grupo / grupos da empresa (outra definição) |
+| C03 | Organograma | digitado à mão | digitado à mão, separado da nota |
+| C04 | Contratos ativos | contratos ativos ÷ conexões NoShadow, sem teto | ativos / NoShadow |
+| C05 | Gastos cadastrados | ativos com gasto ÷ conexões NoShadow | ativos com gasto / NoShadow (código `C05N` na Matriz) |
+| C06 | Conexões diretas | percentil entre as empresas (mais é melhor) | quantidade / vazio |
+| E01 | Satisfação DM/EB | calculada no Consolidado da MATRIZ | não existe na HS COMPLETO |
+| E02 | NPS | calculada no Consolidado da MATRIZ | coluna NPS da HS COMPLETO, NPS ÷ 100 sem converter para 0 a 1 |
+
+**Semântica da HS Bruto.** `Máximo` é o valor de `Bruto` que levaria a nota a 100%. Nas métricas em que mais é melhor, é o denominador (exemplo: A08, homologados / fornecedores). Em A09, A10 e A11, em que menos é melhor, é o teto de infratores para ficar na faixa de 100%: arredondar para baixo (limite da faixa de 100% × funcionários da CARTEIRA). Nesses três, o desvio é `Bruto - Máximo` (quantos infratores precisam sair); nos demais, `Máximo - Bruto`. Atualizado em 09/10/2026: antes, o Máximo de A09, A10 e A11 era 0 digitado.
+
+### Problemas conhecidos (09/10/2026)
+
+- **Health Score em erro.** No Consolidado da MATRIZ, HealthScore e Health Score Ponderado estão em `#N/A` e Engajamento em `#VALUE!` para todas as empresas; o OKR AM KRA1 herda o erro. A aba Métricas tem 18 códigos (sem E02) e o Consolidado tem 19 colunas de métrica, então os `XLOOKUP` comparam listas de tamanhos diferentes. A Tendência tem valores sem erro até 02/10/2026.
+- **HS COMPLETO não reproduz a nota** em A03 (Sec Automation), A06, A07, C01, C02, C03 e E02; E01 não está na aba; a Matriz usa o código `C05N` no lugar de `C05B`, então o Bruto de C05 não chega ao Details.
+- **Métrica vazia vale 0 no ponderado.** Exemplo: sem NPS, uma empresa Sec Automation perde os 5 pontos de E02; Malga e G4 Educação ficam com cerca de metade do peso vazio.
+- **C04 sem teto** (Malga 104%).
+- **Dois status de projeto:** o Consolidado filtra pela tabela `info` do INTERNO e a Tendência usa a aba Info da MATRIZ; Hubla e Malga estão como Implantação numa e Ativado na outra.
+- **Dois Health Scores em produção:** a CARTEIRA mostra o legado; os OKRs usam a MATRIZ. No legado, DOT Digital Group, G4 Educação e Blip ficam sem HS na CARTEIRA (nome diferente ou empresa ausente).
 
 ## AM/TAM ([AM/TAM] DATABASE)
 
