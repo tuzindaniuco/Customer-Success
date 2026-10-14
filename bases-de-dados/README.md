@@ -74,6 +74,7 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 | A09 | E-mail pessoal | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
 | A10 | Desligados com acesso | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
 | A11 | Desligados que acessaram | faixas da FAIXAS HS | infratores / teto (0) |
+| A12 | Eficiência pré-folha | sucesso ÷ iniciados de WORKFLOWS do tipo IDENTITY_SCREENING, últimos 30 dias (a partir de 16/04/2026), mesma regra da A05 | Δ sucesso / Δ iniciados (colunas BG a BI da HS COMPLETO; códigos A12, A12B e A12M na Matriz) |
 | C01 | Configuração de workflow | IGA/Ultimate: (Onboard + Offboard + Move + bônus) ÷ 4; SAG: tem offboard ÷ 1 | pontos / 4 (1 nos planos SAG) |
 | C02 | Cobertura de grupos | GRUPOS: pessoas na folha em grupo específico ÷ pessoas na folha | Com grupo específico / Pessoas na folha (GRUPOS) |
 | C03 | Organograma | digitado à mão | nota da HEALTHSCORE / 1 |
@@ -219,6 +220,40 @@ Pontos que valem registrar:
   - **Nome da Gran Cursos:** "Grancursos" virou "Gran Cursos" na importação da COBERTURA e da COBERTURA GRUPOS, do mesmo jeito que a G4.
 - **Mudança de resultado:** o HealthScore simples do Ultimate passou a respeitar a aba Métricas, onde A04 e A05 estão FALSE. Antes, a fórmula usava todas as métricas para o Ultimate. Contabilizei foi de 68,51% para 66,56%, e Blip de 66,40% para 62,20%. O Ponderado e as categorias não mudaram.
 - **E02:** a coluna E02 foi apagada do Consolidado em 14/10/2026. Pesos e Categorias ainda têm a coluna E02 vazia.
+
+**OKRs lendo a coluna errada (corrigido em 14/10/2026).** O CONSOLIDADO do AM/TAM importava a tabela `metrics` da MATRIZ por posição, mas tinha os cabeçalhos digitados. Quando o E02 foi apagado da MATRIZ, as colunas da direita andaram uma posição. Com isso:
+- KRA1 (Health Score Ponderado) mostrava a média da Adoção.
+- KRT1 (Configuração) mostrava a média do Engajamento.
+- KRT2 (Adoção) mostrava a média da Configuração.
+
+Agora o A2 do CONSOLIDADO importa `Consolidado!A1:AZ1000` com o cabeçalho e escolhe cada coluna pelo nome do cabeçalho do próprio CONSOLIDADO. Coluna que não existe na MATRIZ, como o E02, fica em branco. Valores corrigidos em 14/10: KRA1 50,79%, KRT1 56,43% e KRT2 52,13%. Lição: no Sheets não existem `DROP` nem `XMATCH`, e o `LET` não aceita nome de variável que pareça endereço de célula (`b2`) ou que repita nome de tabela (`pesos`).
+
+**A12, Eficiência Workflow Pré-folha (criada em 14/10/2026).** Mede o sucesso dos workflows de pré-folha (`IDENTITY_SCREENING`), com a mesma regra da A05 (Move).
+- **Métricas:** categoria Adoção. TRUE em IGA Essentials, IGA Advanced e identity_plataform; FALSE nos planos SAG, que não têm pré-folha.
+- **Peso:** 2% no IGA Essentials e no Ultimate, tirados de A02 e A03 (1 ponto de cada). O total da Adoção não muda. Critério: pré-folha é bônus de IGA, da família de eficiência de workflow. SAG fica com 0%. Os pesos de IGA Advanced continuam em aberto.
+- **Efeito no Ponderado:**
+
+  | Empresa | Antes | Depois | Motivo |
+  |---|---|---|---|
+  | Gupy | 77,54% | 77,59% | A12 = 100% |
+  | Blip | 76,37% | 76,45% | A12 = 95,65% |
+  | Contabilizei | 75,62% | 74,04% | sem pré-folha, a A12 vazia conta como 0 |
+  | LG | 74,16% | 72,42% | sem pré-folha, a A12 vazia conta como 0 |
+
+  KRA1 foi para 50,56%. O "vale 0 quando vazio" é a regra de métrica vazia, que está em aberto no ClickUp.
+- **A04 e A05:** em 14/10/2026, o usuário marcou A04 (Férias/Afastamento) e A05 (Move) como TRUE para IGA e Ultimate na aba Métricas. Elas entram no HealthScore simples, mas continuam com peso 0.
+
+**Como adicionar uma métrica nova (roteiro usado na A12).**
+1. **INTERNO, HEALTHSCORE:** inserir a coluna da nota no lugar certo da ordem (a A12 ficou depois da A11). A tabela cresce sozinha, e as referências de outras fórmulas se ajustam.
+2. **INTERNO, HS COMPLETO:** acrescentar nota, Bruto e Máximo **no fim da tabela** (colunas novas depois de BF), para não deslocar a Matriz.
+3. **MATRIZ, Fonte:** corrigir os cabeçalhos, que andam uma coluna (hoje Projeto está na Y).
+4. **MATRIZ, Consolidado:** inserir a coluna com o código da métrica na mesma posição e ajustar o filtro do A2 (hoje `filter(Fonte!A2:V; Fonte!B2:B<>""; Fonte!Y2:Y<>"Implantação")`). As fórmulas genéricas se ajustam sozinhas.
+5. **MATRIZ, Métricas:** inserir a linha da métrica (ID, critério, categoria, cálculo e TRUE/FALSE por plano).
+6. **MATRIZ, Pesos:** inserir a coluna e redistribuir os pesos, para cada plano somar 100%. Categorias: inserir a coluna e só escrever o cabeçalho. A fórmula de cada linha descobre a categoria pela aba Métricas.
+7. **MATRIZ, Matriz:** cadastrar os códigos (`X`, `XB`, `XM`) nas linhas que o `TRANSPOSE` da HS COMPLETO ocupa e estender a tabela `matriz`. A aba Details se monta sozinha.
+8. **MATRIZ, Tendência:** inserir a coluna (histórico em branco).
+9. **AM/TAM, CONSOLIDADO:** inserir a coluna com o mesmo cabeçalho. O import busca pelo nome.
+10. **Conferir:** HealthScore e Ponderado antes e depois, e os OKRs do AM/TAM.
 
 **Nomes de empresa divergem entre abas** (G4 e Grancursos já são normalizadas na importação da COBERTURA; Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas. `Solfacil-POC` não é a Solfacil.
 
