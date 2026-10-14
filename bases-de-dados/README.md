@@ -90,7 +90,7 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 - **Bruto de C05 não chega ao Details:** a Matriz usa o código `C05N` no lugar de `C05B`. As demais métricas da HS COMPLETO reproduzem a nota desde 14/10/2026.
 - **Métrica vazia vale 0 no ponderado.** Exemplo: sem NPS, uma empresa Sec Automation perde os 5 pontos de E02; Malga e G4 Educação ficam com cerca de metade do peso vazio.
 - **C04 sem teto** (Malga 104%).
-- **Dois status de projeto:** o Consolidado filtra pela tabela `info` do INTERNO e a Tendência usa a aba Info da MATRIZ; Hubla e Malga estão como Implantação numa e Ativado na outra.
+- **Status de projeto em dois lugares:** o Consolidado usa a tabela `info` do INTERNO (coluna Projeto da HEALTHSCORE), e a Tendência usa a aba Info da MATRIZ. Em 14/10/2026 as duas foram alinhadas para Hubla (Implantação), Sympla (Implantação) e Malga (Ativado), mas continuam sendo dois cadastros manuais.
 - **Dois Health Scores em produção:** a CARTEIRA mostra o legado; os OKRs usam a MATRIZ. No legado, DOT Digital Group, G4 Educação e Blip ficam sem HS na CARTEIRA (nome diferente ou empresa ausente).
 
 ## AM/TAM ([AM/TAM] DATABASE)
@@ -177,7 +177,11 @@ Pontos que valem registrar:
 - **Planos sem empresa:** SAG Essentials e IGA Advanced também foram cadastrados em Pesos e Categorias, com os pesos em branco até a definição. As fórmulas dessas linhas usam IFERROR para não mostrar erro. No Consolidado, SAG Essentials usa o conjunto de métricas do Sec Automation e IGA Advanced o do Identity Managment, até a aba Métricas ganhar colunas próprias.
 - **C01 nos planos SAG:** a regra de ÷ 1 não afeta a nota final hoje, porque C01 não faz parte do conjunto de métricas do Sec Automation (peso vazio).
 
-**Nomes de empresa divergem entre abas** (G4 e Grancursos, Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas, mas G4 e Grancursos exigem mapeamento manual. `Solfacil-POC` não é a Solfacil.
+**Empresas em implantação fora do Health Score (corrigido em 14/10/2026).** A regra é que empresas com Projeto = Implantação não entram no Consolidado da MATRIZ. O filtro estava quebrado: quando a coluna Satisfação DM/EB entrou na HEALTHSCORE do INTERNO, o Projeto passou da coluna W para a X na aba Fonte, mas o Consolidado continuou filtrando a W (Adoção Automação, sempre vazia). Com isso, nenhuma empresa era excluída. Agora o Consolidado filtra `Fonte!X2:X<>"Implantação"`, e os cabeçalhos V, W e X da Fonte foram corrigidos. Na mesma data, Hubla e Sympla foram marcadas como Implantação na aba INFO do INTERNO (estavam como Ativado). O Consolidado passou de 16 para 14 empresas, e os OKRs do AM/TAM que fazem média dele também mudam.
+
+**G4 Educação na COBERTURA e na COBERTURA GRUPOS (corrigido em 14/10/2026).** O relatório AM/CX (Relatórios AM/CX 2026.Q3) traz o nome da plataforma, "G4". As abas COBERTURA e COBERTURA GRUPOS do INTERNO agora trocam "G4" por "G4 Educação" na importação, dentro do `IMPORTRANGE`. Não dá para trocar no relatório, porque a próxima carga sobrescreveria. Com isso, GRUPOS, ADOÇÃO SCORE e o botão de offboard do C01 enxergam a G4: o C02 dela passou a 100% (572/572). O A06 dela continua vazio porque a G4 não tem linhas de cobertura depois de 21/07/2026. Para outro nome divergente, como Grancursos, é só acrescentar a troca nessas duas fórmulas.
+
+**Nomes de empresa divergem entre abas** (Grancursos; G4 já é normalizada na importação, Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas, mas G4 e Grancursos exigem mapeamento manual. `Solfacil-POC` não é a Solfacil.
 
 **Valores inválidos conhecidos.** COMPANIES_HISTORIC e as abas de cobertura do relatório têm datas impossíveis em algumas linhas (ano 1000, 1986, 2027); desconsidere ao calcular.
 
