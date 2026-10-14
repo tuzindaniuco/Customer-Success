@@ -73,22 +73,21 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 | A09 | E-mail pessoal | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
 | A10 | Desligados com acesso | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
 | A11 | Desligados que acessaram | faixas da FAIXAS HS | infratores / teto (0) |
-| C01 | Configuração de workflow | tipos distintos de workflow ÷ 2 (1 para Gran Cursos), limitado a 100% | tipos / 2 (1 para Gran Cursos); nota = MIN(1; Bruto ÷ Máximo) |
+| C01 | Configuração de workflow | tipos distintos de workflow ÷ 4 (÷ 1 nos planos SAG), limitado a 100% | tipos / 4 (1 nos planos SAG); nota = MIN(1; Bruto ÷ Máximo) |
 | C02 | Cobertura de grupos | GRUPOS: pessoas na folha em grupo específico ÷ pessoas na folha | Com grupo específico / Pessoas na folha (GRUPOS) |
 | C03 | Organograma | digitado à mão | nota da HEALTHSCORE / 1 |
 | C04 | Contratos ativos | contratos ativos ÷ conexões NoShadow, sem teto | ativos / NoShadow |
 | C05 | Gastos cadastrados | ativos com gasto ÷ conexões NoShadow | ativos com gasto / NoShadow (código `C05N` na Matriz) |
 | C06 | Conexões diretas | percentil entre as empresas (mais é melhor) | quantidade / vazio |
-| E01 | Satisfação DM/EB | calculada no Consolidado da MATRIZ | pontos do HAPPYSCORE mais recente / 10 (colunas BD a BF) |
-| E02 | NPS | calculada no Consolidado da MATRIZ | NPS + 100 / 200 (colunas BG a BI, códigos E02, E02B e E02M na Matriz) |
+| E01 | Satisfação DM/EB | fixa em 30% para todas as empresas (Consolidado da MATRIZ) | 3 / 10 fixo (colunas BD a BF) |
+| E02 | NPS | removida em 14/10/2026 | removida |
 
 **Semântica da HS Bruto.** `Máximo` é o valor de `Bruto` que levaria a nota a 100%. Nas métricas em que mais é melhor, é o denominador (exemplo: A08, homologados / fornecedores). Em A09, A10 e A11, em que menos é melhor, é o teto de infratores para ficar na faixa de 100%: arredondar para baixo (limite da faixa de 100% × funcionários da CARTEIRA). Nesses três, o desvio é `Bruto - Máximo` (quantos infratores precisam sair); nos demais, `Máximo - Bruto`. Atualizado em 09/10/2026: antes, o Máximo de A09, A10 e A11 era 0 digitado.
 
 ### Problemas conhecidos (09/10/2026)
 
-- **Health Score em erro (ainda em 14/10/2026).** Em 14/10, HealthScore e Health Score Ponderado estavam em `#N/A` para todas as empresas e Engajamento em `#VALUE!`. Além da falta da linha E02 na aba Métricas, os planos da carteira (SAG Advanced, IGA Essentials) não existem nas abas Pesos e Categorias, que só têm FinOPs, Sec Automation, Identity Managment, Ultimate e Sec Automation Gran. Por isso a coluna Peso do Details fica vazia para essas empresas. Histórico: No Consolidado da MATRIZ, HealthScore e Health Score Ponderado ficam em `#N/A` e Engajamento em `#VALUE!` (o OKR AM KRA1 herda o erro) porque a aba Métricas ainda não tem a linha E02. É esperado: as métricas de Engajamento ainda estão sendo construídas (confirmado em 09/10/2026). A Tendência tem valores sem erro até 02/10/2026; evitar gravar semanas com erro.
+- **Ponderado em erro nos planos SAG Advanced e IGA Essentials (14/10/2026).** Esses planos da carteira não existem nas abas Pesos e Categorias, que só têm FinOPs, Sec Automation, Identity Managment, Ultimate e Sec Automation Gran. Por isso Health Score Ponderado, Adoção, Configuração e Engajamento ficam em `#N/A` para essas empresas, e o Peso do Details fica vazio. O OKR AM KRA1 herda o erro. O HealthScore simples calcula. Antes de 14/10, o erro atingia todas as empresas porque o Consolidado lia a coluna E02, que a aba Métricas não tem. A Tendência tem valores sem erro até 02/10/2026; evitar gravar semanas com erro.
 - **Bruto de C05 não chega ao Details:** a Matriz usa o código `C05N` no lugar de `C05B`. As demais métricas da HS COMPLETO reproduzem a nota desde 14/10/2026.
-- **Details não mostra E02:** a tabela `details` da aba Métricas termina em E01, e o Details só lista os códigos dessa tabela. Os códigos E02, E02B e E02M já existem na Matriz.
 - **Métrica vazia vale 0 no ponderado.** Exemplo: sem NPS, uma empresa Sec Automation perde os 5 pontos de E02; Malga e G4 Educação ficam com cerca de metade do peso vazio.
 - **C04 sem teto** (Malga 104%).
 - **Dois status de projeto:** o Consolidado filtra pela tabela `info` do INTERNO e a Tendência usa a aba Info da MATRIZ; Hubla e Malga estão como Implantação numa e Ativado na outra.
@@ -144,11 +143,18 @@ Pontos que valem registrar:
 
 **HS Bruto alinhado à nota em A03, C01, C02, C03, E01 e E02 (aplicado em 14/10/2026).** Na HS COMPLETO do INTERNO, Bruto ÷ Máximo passou a reproduzir a nota em todas as métricas (em C01, com teto de 100%). Quando a nota está em branco, Bruto e Máximo também ficam.
 - A03: soma Sucessos e Iniciados OFFBOARD na sexta mais recente usada pela nota, em `srbotton` para Sec Automation e em `adoção_sr` para os demais planos. Antes somava WORKFLOWS dos últimos 30 dias a partir de hoje, uma janela diferente da nota.
-- C01: o Máximo passou a ser 2 (1 para Gran Cursos), igual à nota; antes usava 3 para Contabilizei. Bruto acima do Máximo (LG 3, Blip 5) dá 100%, sem passar disso.
+- C01: ver "C01 dividido por 4" abaixo.
 - C02: Bruto é `Com grupo específico` e Máximo é `Pessoas na folha` da aba GRUPOS. Antes contava workflows de onboarding com grupo e grupos da empresa. A busca é pelo nome: G4 Educação não aparece porque a GRUPOS usa "G4" (ver "Nomes de empresa divergem").
 - C03: Bruto lê a nota da HEALTHSCORE e Máximo é 1. O Bruto digitado antes estava desalinhado da nota em 8 empresas, provavelmente deslocado de linha.
-- E01: Bruto é a pontuação mais recente da aba HAPPYSCORE do AM/TAM, via `IMPORTRANGE`, e Máximo é 10, a mesma conta do Consolidado. Antes eram 3 e 10 digitados para todas as empresas.
-- E02: nas colunas novas BG a BI, Bruto é NPS + 100 e Máximo é 200, o que dá a mesma nota do Consolidado: (NPS ÷ 100 + 1) ÷ 2. A Matriz ganhou os códigos E02, E02B e E02M, e sua tabela `matriz` foi estendida até a linha 58. Desvio = 200 - (NPS + 100) = 100 - NPS.
+- E01 e E02: ver "Engajamento só com E01" abaixo.
+
+**C01 dividido por 4 (decisão de 14/10/2026).** A nota de Configuração de workflow passou a ser tipos distintos de workflow ÷ 4 para todos os planos e ÷ 1 nos planos SAG (plano começando com "SAG"), com teto de 100%. Isso vale para a coluna `Configuração WorKflow` da HEALTHSCORE e para o Máximo de C01 da HS COMPLETO, ambas no INTERNO. A regra antiga era ÷ 2 (÷ 1 para Gran Cursos). A descrição da aba Métricas da MATRIZ foi atualizada.
+
+**Engajamento só com E01 (decisão de 14/10/2026).** No desenho novo, o Engajamento tem uma nota só: E01, Satisfação DM/EB. O E02 (NPS) saiu do Health Score. Como ainda não há nenhuma nota de satisfação, o E01 fica em 30% (3 de 10) para todas as empresas até a regra ser definida.
+- **Consolidado da MATRIZ:** E01 = 0,3 fixo; a fórmula antiga, com o HAPPYSCORE mais recente ÷ 10, está no histórico de versões. A coluna E02 ficou vazia, sem fórmula; a coluna foi mantida para não deslocar o CONSOLIDADO do AM/TAM nem a Tendência. HealthScore e Health Score Ponderado leem E:V, e os Pesos C:T. Engajamento lê só V e Categorias T.
+- **Pesos:** o peso do E02 foi somado ao E01 e a coluna E02 ficou vazia. FinOPs 21%, Sec Automation 17%, Identity Managment 9%, Ultimate 5%, Sec Automation Gran 15%. O total de cada plano continua 100%.
+- **HS COMPLETO do INTERNO:** E01 = 3 / 10 para todas as empresas, por fórmula. As colunas do E02 foram apagadas, e a Matriz voltou a terminar em E01M (linha 55).
+- **Resultado em 14/10/2026:** o HealthScore simples voltou a calcular para todas as empresas. Ponderado, Adoção, Configuração e Engajamento calculam para as empresas Ultimate e ficam em `#N/A` para as SAG Advanced e IGA Essentials, porque esses planos não existem em Pesos e Categorias.
 
 **Nomes de empresa divergem entre abas** (G4 e Grancursos, Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas, mas G4 e Grancursos exigem mapeamento manual. `Solfacil-POC` não é a Solfacil.
 
