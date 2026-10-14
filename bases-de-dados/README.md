@@ -64,7 +64,7 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 |---|---|---|---|
 | A01 | Login frequência | maior % de acesso de um único usuário nos últimos 30 dias (dias únicos ÷ 22) | dias únicos do usuário mais ativo / 22 |
 | A02 | Eficiência onboarding | Δ sucesso ÷ Δ iniciados de WORKFLOWS, últimos 30 dias (a partir de 16/04/2026) | Δ sucesso / Δ iniciados |
-| A03 | Eficiência offboarding | ADOÇÃO SCORE da sexta mais recente (botão para Sec Automation, WORKFLOWS para os demais) | Δ sucesso / Δ iniciados de WORKFLOWS; vazio para Sec Automation |
+| A03 | Eficiência offboarding | ADOÇÃO SCORE da sexta mais recente (botão para Sec Automation, WORKFLOWS para os demais) | Sucessos / Iniciados OFFBOARD da sexta da nota (`srbotton` para Sec Automation, `adoção_sr` para os demais) |
 | A04 | Eficiência absent | WORKFLOWS, a partir de 04/08/2026 | Δ sucesso / Δ iniciados |
 | A05 | Eficiência move | WORKFLOWS | Δ sucesso / Δ iniciados |
 | A06 | Cobertura onboarding | ADOÇÃO SCORE: disparos ÷ admissões | disparos ONBOARD / movimentações de Admissão da COBERTURA, na janela da nota (desde 14/10/2026) |
@@ -73,21 +73,22 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 | A09 | E-mail pessoal | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
 | A10 | Desligados com acesso | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
 | A11 | Desligados que acessaram | faixas da FAIXAS HS | infratores / teto (0) |
-| C01 | Configuração de workflow | tipos distintos de workflow ÷ 2 (1 para Gran Cursos), limitado a 100% | tipos / 2 (3 para Contabilizei) |
-| C02 | Cobertura de grupos | GRUPOS: pessoas na folha em grupo específico ÷ pessoas na folha | workflows de onboarding com grupo / grupos da empresa (outra definição) |
-| C03 | Organograma | digitado à mão | digitado à mão, separado da nota |
+| C01 | Configuração de workflow | tipos distintos de workflow ÷ 2 (1 para Gran Cursos), limitado a 100% | tipos / 2 (1 para Gran Cursos); nota = MIN(1; Bruto ÷ Máximo) |
+| C02 | Cobertura de grupos | GRUPOS: pessoas na folha em grupo específico ÷ pessoas na folha | Com grupo específico / Pessoas na folha (GRUPOS) |
+| C03 | Organograma | digitado à mão | nota da HEALTHSCORE / 1 |
 | C04 | Contratos ativos | contratos ativos ÷ conexões NoShadow, sem teto | ativos / NoShadow |
 | C05 | Gastos cadastrados | ativos com gasto ÷ conexões NoShadow | ativos com gasto / NoShadow (código `C05N` na Matriz) |
 | C06 | Conexões diretas | percentil entre as empresas (mais é melhor) | quantidade / vazio |
-| E01 | Satisfação DM/EB | calculada no Consolidado da MATRIZ | não existe na HS COMPLETO |
-| E02 | NPS | calculada no Consolidado da MATRIZ | coluna NPS da HS COMPLETO, NPS ÷ 100 sem converter para 0 a 1 |
+| E01 | Satisfação DM/EB | calculada no Consolidado da MATRIZ | pontos do HAPPYSCORE mais recente / 10 (colunas BD a BF) |
+| E02 | NPS | calculada no Consolidado da MATRIZ | NPS + 100 / 200 (colunas BG a BI, códigos E02, E02B e E02M na Matriz) |
 
 **Semântica da HS Bruto.** `Máximo` é o valor de `Bruto` que levaria a nota a 100%. Nas métricas em que mais é melhor, é o denominador (exemplo: A08, homologados / fornecedores). Em A09, A10 e A11, em que menos é melhor, é o teto de infratores para ficar na faixa de 100%: arredondar para baixo (limite da faixa de 100% × funcionários da CARTEIRA). Nesses três, o desvio é `Bruto - Máximo` (quantos infratores precisam sair); nos demais, `Máximo - Bruto`. Atualizado em 09/10/2026: antes, o Máximo de A09, A10 e A11 era 0 digitado.
 
 ### Problemas conhecidos (09/10/2026)
 
-- **Health Score em erro enquanto o Engajamento está em construção.** No Consolidado da MATRIZ, HealthScore e Health Score Ponderado ficam em `#N/A` e Engajamento em `#VALUE!` (o OKR AM KRA1 herda o erro) porque a aba Métricas ainda não tem a linha E02. É esperado: as métricas de Engajamento ainda estão sendo construídas (confirmado em 09/10/2026). A Tendência tem valores sem erro até 02/10/2026; evitar gravar semanas com erro.
-- **HS COMPLETO não reproduz a nota** em A03 (Sec Automation), C01, C02, C03 e E02; E01 não está na aba; a Matriz usa o código `C05N` no lugar de `C05B`, então o Bruto de C05 não chega ao Details.
+- **Health Score em erro (ainda em 14/10/2026).** Em 14/10, HealthScore e Health Score Ponderado estavam em `#N/A` para todas as empresas e Engajamento em `#VALUE!`. Além da falta da linha E02 na aba Métricas, os planos da carteira (SAG Advanced, IGA Essentials) não existem nas abas Pesos e Categorias, que só têm FinOPs, Sec Automation, Identity Managment, Ultimate e Sec Automation Gran. Por isso a coluna Peso do Details fica vazia para essas empresas. Histórico: No Consolidado da MATRIZ, HealthScore e Health Score Ponderado ficam em `#N/A` e Engajamento em `#VALUE!` (o OKR AM KRA1 herda o erro) porque a aba Métricas ainda não tem a linha E02. É esperado: as métricas de Engajamento ainda estão sendo construídas (confirmado em 09/10/2026). A Tendência tem valores sem erro até 02/10/2026; evitar gravar semanas com erro.
+- **Bruto de C05 não chega ao Details:** a Matriz usa o código `C05N` no lugar de `C05B`. As demais métricas da HS COMPLETO reproduzem a nota desde 14/10/2026.
+- **Details não mostra E02:** a tabela `details` da aba Métricas termina em E01, e o Details só lista os códigos dessa tabela. Os códigos E02, E02B e E02M já existem na Matriz.
 - **Métrica vazia vale 0 no ponderado.** Exemplo: sem NPS, uma empresa Sec Automation perde os 5 pontos de E02; Malga e G4 Educação ficam com cerca de metade do peso vazio.
 - **C04 sem teto** (Malga 104%).
 - **Dois status de projeto:** o Consolidado filtra pela tabela `info` do INTERNO e a Tendência usa a aba Info da MATRIZ; Hubla e Malga estão como Implantação numa e Ativado na outra.
@@ -140,6 +141,14 @@ Pontos que valem registrar:
 - A versão anterior das fórmulas (percentil) está no histórico de versões do Google Sheets.
 
 **HS Bruto de A06 e A07 = disparos e movimentações da COBERTURA (aplicado em 14/10/2026).** Antes, o Bruto de A06 e A07 na HS COMPLETO do INTERNO era cópia do Bruto de A02 e A03 (sucessos de WORKFLOWS) e o Máximo dava `#REF!`. Agora as colunas O a R usam a mesma conta da nota no ADOÇÃO SCORE: pegam a sexta mais recente com cobertura preenchida, montam a janela de 30 dias que termina 7 dias antes dela e somam na tabela `cobertura`. Bruto é `Disparos` com Tipo ONBOARD ou OFFBOARD; Máximo é `Movimentações` com Ação Admissão ou Demissão. Quando a nota está em branco, Bruto e Máximo também ficam em branco. Conferido em 14/10/2026: Bruto ÷ Máximo reproduz a nota nas 7 empresas com cobertura (exemplos: Gupy 9/12 = 75%, Blip 24/27 = 88,89%, Hubla offboarding 4/5 = 80%), e os códigos A06B, A06M, A07B e A07M chegam à Matriz. O desvio é `Máximo - Bruto`, ou seja, as movimentações que ficaram sem disparo.
+
+**HS Bruto alinhado à nota em A03, C01, C02, C03, E01 e E02 (aplicado em 14/10/2026).** Na HS COMPLETO do INTERNO, Bruto ÷ Máximo passou a reproduzir a nota em todas as métricas (em C01, com teto de 100%). Quando a nota está em branco, Bruto e Máximo também ficam.
+- A03: soma Sucessos e Iniciados OFFBOARD na sexta mais recente usada pela nota, em `srbotton` para Sec Automation e em `adoção_sr` para os demais planos. Antes somava WORKFLOWS dos últimos 30 dias a partir de hoje, uma janela diferente da nota.
+- C01: o Máximo passou a ser 2 (1 para Gran Cursos), igual à nota; antes usava 3 para Contabilizei. Bruto acima do Máximo (LG 3, Blip 5) dá 100%, sem passar disso.
+- C02: Bruto é `Com grupo específico` e Máximo é `Pessoas na folha` da aba GRUPOS. Antes contava workflows de onboarding com grupo e grupos da empresa. A busca é pelo nome: G4 Educação não aparece porque a GRUPOS usa "G4" (ver "Nomes de empresa divergem").
+- C03: Bruto lê a nota da HEALTHSCORE e Máximo é 1. O Bruto digitado antes estava desalinhado da nota em 8 empresas, provavelmente deslocado de linha.
+- E01: Bruto é a pontuação mais recente da aba HAPPYSCORE do AM/TAM, via `IMPORTRANGE`, e Máximo é 10, a mesma conta do Consolidado. Antes eram 3 e 10 digitados para todas as empresas.
+- E02: nas colunas novas BG a BI, Bruto é NPS + 100 e Máximo é 200, o que dá a mesma nota do Consolidado: (NPS ÷ 100 + 1) ÷ 2. A Matriz ganhou os códigos E02, E02B e E02M, e sua tabela `matriz` foi estendida até a linha 58. Desvio = 200 - (NPS + 100) = 100 - NPS.
 
 **Nomes de empresa divergem entre abas** (G4 e Grancursos, Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas, mas G4 e Grancursos exigem mapeamento manual. `Solfacil-POC` não é a Solfacil.
 
