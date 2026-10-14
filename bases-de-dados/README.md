@@ -190,12 +190,35 @@ Pontos que valem registrar:
 - **Status de projeto por empresa:** edite na INFO do AM/TAM, na linha em que Chave 1 é o nome da empresa e Chave 2 é o status. Empresa com Implantação sai do Consolidado.
 - **Divergência resolvida:** a MATRIZ tinha DOT Digital Group como Implantação e o INTERNO como Perdido; ficou Perdido.
 
-**Catálogo de planos (etapas 1 e 2 aplicadas em 14/10/2026).** No HubSpot, o produto é SAG ou IGA, e os planos são subcategorias deles. O Ultimate tem os dois produtos (SAG, IGA).
-- **Fonte:** aba CATÁLOGO PLANOS do AM/TAM, tabela `planos_catalogo`. Colunas digitadas: Plano ID (valor interno do campo Plano do negócio no HubSpot), Plano (nome exibido), Produto (SAG, IGA ou SAG, IGA) e Ativo. Colunas calculadas a partir do Produto: Tem SAG, Tem IGA, Divisor C01 (4 se tem IGA, 1 se não tem) e Usa botão offboard (Sim se tem SAG e não tem IGA). Não confundir com a aba PLANOS do AM/TAM, que é gravada pelo Make a partir do ClickUp.
-- **INTERNO:** a aba CATÁLOGO PLANOS (tabela `planos`) é `IMPORTRANGE` do catálogo. Nenhuma fórmula do INTERNO tem mais nome de plano escrito. As regras consultam o catálogo pelo nome do plano: C01 na HEALTHSCORE e na HS COMPLETO (colunas AA e AB), A06 na HEALTHSCORE, A03 Bruto e Máximo na HS COMPLETO (colunas I e J), ADOÇÃO SCORE (D, F, H e Q) e SUCCESS RATE BOTTON (D).
-- **Bug corrigido junto:** desde a troca de Sec Automation para SAG Advanced, a SUCCESS RATE BOTTON estava vazia, e o ADOÇÃO SCORE tratava as empresas SAG como workflow. Agora o offboard das SAG volta a vir do botão. A03 e A07 mudaram em SolFacil (100% e 100%), Mercado Bitcoin (66,67% e 100%) e Gran Cursos (100% e 54,55%). Como A03 e A07 não pesam no SAG, o Consolidado não mudou.
-- **Nome normalizado:** "Grancursos" virou "Gran Cursos" na importação da COBERTURA e da COBERTURA GRUPOS, do mesmo jeito que a G4.
-- **Para renomear um plano:** altere a coluna Plano no catálogo. As etapas 3 (MATRIZ: Métricas, Pesos e Categorias por Plano ID, e Consolidado genérico) e 4 (CARTEIRA lendo Plano e Produto do catálogo) ainda não foram feitas. Até lá, renomear também exige ajustar a CARTEIRA (via INFO) e as linhas de Pesos e Categorias.
+**Catálogo de planos (aplicado em 14/10/2026).** No HubSpot, o produto é SAG ou IGA, e os planos são subcategorias deles. O Ultimate tem os dois produtos (SAG, IGA). O nome dos planos agora fica em um lugar só.
+
+- **Fonte:** aba CATÁLOGO PLANOS do AM/TAM, tabela `planos_catalogo`.
+  - Colunas digitadas: **Plano ID** (valor interno do campo Plano do negócio no HubSpot), **Plano** (nome exibido), **Produto** (SAG, IGA ou SAG, IGA) e **Ativo**.
+  - Colunas calculadas a partir do Produto: Tem SAG, Tem IGA, Divisor C01 (4 se tem IGA, 1 se não tem) e Usa botão offboard (Sim se tem SAG e não tem IGA).
+  - Não confundir com a aba PLANOS do AM/TAM, que é gravada pelo Make a partir do ClickUp.
+- **Chave:** tudo se liga pelo Plano ID. Todos os planos novos têm ID igual ao nome, menos o Ultimate (`identity_plataform`). O Plano ID não muda.
+- **Cópias do catálogo:** a aba CATÁLOGO PLANOS do INTERNO (tabela `planos`) e a aba Catálogo Planos da MATRIZ (tabela `planos`) são `IMPORTRANGE` do catálogo.
+- **CARTEIRA do AM/TAM:** Plano e Produto (colunas T e U) vêm do catálogo pelo Plano ID (coluna X). O Produto passou a aparecer como SAG, IGA ou SAG, IGA. As linhas de plano da INFO foram apagadas.
+- **INTERNO:** nenhuma fórmula tem nome de plano escrito. As regras consultam o catálogo:
+  - C01 na HEALTHSCORE e na HS COMPLETO (colunas AA e AB);
+  - A06 na HEALTHSCORE;
+  - A03 Bruto e Máximo na HS COMPLETO (colunas I e J);
+  - ADOÇÃO SCORE (colunas D, F, H e Q);
+  - SUCCESS RATE BOTTON (coluna D).
+- **MATRIZ:**
+  - **Métricas:** uma coluna TRUE/FALSE por Plano ID: SAG Essentials, SAG Advanced, IGA Essentials, IGA Advanced e identity_plataform. SAG Essentials copiou o conjunto do SAG Advanced, e IGA Advanced copiou o do IGA Essentials.
+  - **Pesos e Categorias:** a coluna A é o Plano ID. A linha Sec Automation Gran e as linhas dos planos antigos foram apagadas.
+  - **Consolidado:** HealthScore, Health Score Ponderado, Adoção, Configuração e Engajamento usam uma fórmula genérica. Ela pega o Plano ID da empresa no catálogo, usa a coluna desse ID na Métricas e aplica a linha desse ID em Pesos ou Categorias. A Calculadora usa a mesma fórmula, e a coluna Peso do Details também busca pelo Plano ID.
+- **Para renomear um plano:** altere a coluna Plano no catálogo do AM/TAM.
+- **Para criar um plano:** são três passos:
+  1. Uma linha no catálogo, com o Plano ID do HubSpot.
+  2. Uma coluna com esse ID na aba Métricas.
+  3. Uma linha com esse ID em Pesos e outra em Categorias.
+- **Bugs corrigidos junto:**
+  - **Botão de offboard:** desde a troca de Sec Automation para SAG Advanced, a SUCCESS RATE BOTTON estava vazia, e o ADOÇÃO SCORE tratava as empresas SAG como workflow. Agora o offboard das SAG volta a vir do botão. A03 e A07 mudaram em SolFacil, Mercado Bitcoin e Gran Cursos, sem efeito no Consolidado, porque essas métricas não pesam no SAG.
+  - **Nome da Gran Cursos:** "Grancursos" virou "Gran Cursos" na importação da COBERTURA e da COBERTURA GRUPOS, do mesmo jeito que a G4.
+- **Mudança de resultado:** o HealthScore simples do Ultimate passou a respeitar a aba Métricas, onde A04 e A05 estão FALSE. Antes, a fórmula usava todas as métricas para o Ultimate. Contabilizei foi de 68,51% para 66,56%, e Blip de 66,40% para 62,20%. O Ponderado e as categorias não mudaram.
+- **E02:** a coluna E02 foi apagada do Consolidado em 14/10/2026. Pesos e Categorias ainda têm a coluna E02 vazia.
 
 **Nomes de empresa divergem entre abas** (G4 e Grancursos já são normalizadas na importação da COBERTURA; Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas. `Solfacil-POC` não é a Solfacil.
 
