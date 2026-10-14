@@ -190,7 +190,14 @@ Pontos que valem registrar:
 - **Status de projeto por empresa:** edite na INFO do AM/TAM, na linha em que Chave 1 é o nome da empresa e Chave 2 é o status. Empresa com Implantação sai do Consolidado.
 - **Divergência resolvida:** a MATRIZ tinha DOT Digital Group como Implantação e o INTERNO como Perdido; ficou Perdido.
 
-**Nomes de empresa divergem entre abas** (Grancursos; G4 já é normalizada na importação, Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas, mas Grancursos exige mapeamento manual. `Solfacil-POC` não é a Solfacil.
+**Catálogo de planos (etapas 1 e 2 aplicadas em 14/10/2026).** No HubSpot, o produto é SAG ou IGA, e os planos são subcategorias deles. O Ultimate tem os dois produtos (SAG, IGA).
+- **Fonte:** aba CATÁLOGO PLANOS do AM/TAM, tabela `planos_catalogo`. Colunas digitadas: Plano ID (valor interno do campo Plano do negócio no HubSpot), Plano (nome exibido), Produto (SAG, IGA ou SAG, IGA) e Ativo. Colunas calculadas a partir do Produto: Tem SAG, Tem IGA, Divisor C01 (4 se tem IGA, 1 se não tem) e Usa botão offboard (Sim se tem SAG e não tem IGA). Não confundir com a aba PLANOS do AM/TAM, que é gravada pelo Make a partir do ClickUp.
+- **INTERNO:** a aba CATÁLOGO PLANOS (tabela `planos`) é `IMPORTRANGE` do catálogo. Nenhuma fórmula do INTERNO tem mais nome de plano escrito. As regras consultam o catálogo pelo nome do plano: C01 na HEALTHSCORE e na HS COMPLETO (colunas AA e AB), A06 na HEALTHSCORE, A03 Bruto e Máximo na HS COMPLETO (colunas I e J), ADOÇÃO SCORE (D, F, H e Q) e SUCCESS RATE BOTTON (D).
+- **Bug corrigido junto:** desde a troca de Sec Automation para SAG Advanced, a SUCCESS RATE BOTTON estava vazia, e o ADOÇÃO SCORE tratava as empresas SAG como workflow. Agora o offboard das SAG volta a vir do botão. A03 e A07 mudaram em SolFacil (100% e 100%), Mercado Bitcoin (66,67% e 100%) e Gran Cursos (100% e 54,55%). Como A03 e A07 não pesam no SAG, o Consolidado não mudou.
+- **Nome normalizado:** "Grancursos" virou "Gran Cursos" na importação da COBERTURA e da COBERTURA GRUPOS, do mesmo jeito que a G4.
+- **Para renomear um plano:** altere a coluna Plano no catálogo. As etapas 3 (MATRIZ: Métricas, Pesos e Categorias por Plano ID, e Consolidado genérico) e 4 (CARTEIRA lendo Plano e Produto do catálogo) ainda não foram feitas. Até lá, renomear também exige ajustar a CARTEIRA (via INFO) e as linhas de Pesos e Categorias.
+
+**Nomes de empresa divergem entre abas** (G4 e Grancursos já são normalizadas na importação da COBERTURA; Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas. `Solfacil-POC` não é a Solfacil.
 
 **Valores inválidos conhecidos.** COMPANIES_HISTORIC e as abas de cobertura do relatório têm datas impossíveis em algumas linhas (ano 1000, 1986, 2027); desconsidere ao calcular.
 
