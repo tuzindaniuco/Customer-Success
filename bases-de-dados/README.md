@@ -73,7 +73,7 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 | A09 | E-mail pessoal | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
 | A10 | Desligados com acesso | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
 | A11 | Desligados que acessaram | faixas da FAIXAS HS | infratores / teto (0) |
-| C01 | Configuração de workflow | tipos distintos de workflow ÷ 4 (÷ 1 nos planos SAG), limitado a 100% | tipos / 4 (1 nos planos SAG); nota = MIN(1; Bruto ÷ Máximo) |
+| C01 | Configuração de workflow | IGA/Ultimate: (Onboard + Offboard + Move + bônus) ÷ 4; SAG: tem offboard ÷ 1 | pontos / 4 (1 nos planos SAG) |
 | C02 | Cobertura de grupos | GRUPOS: pessoas na folha em grupo específico ÷ pessoas na folha | Com grupo específico / Pessoas na folha (GRUPOS) |
 | C03 | Organograma | digitado à mão | nota da HEALTHSCORE / 1 |
 | C04 | Contratos ativos | contratos ativos ÷ conexões NoShadow, sem teto | ativos / NoShadow |
@@ -148,7 +148,13 @@ Pontos que valem registrar:
 - C03: Bruto lê a nota da HEALTHSCORE e Máximo é 1. O Bruto digitado antes estava desalinhado da nota em 8 empresas, provavelmente deslocado de linha.
 - E01 e E02: ver "Engajamento só com E01" abaixo.
 
-**C01 dividido por 4 (decisão de 14/10/2026).** A nota de Configuração de workflow passou a ser tipos distintos de workflow ÷ 4 para todos os planos e ÷ 1 nos planos SAG (plano começando com "SAG"), com teto de 100%. Isso vale para a coluna `Configuração WorKflow` da HEALTHSCORE e para o Máximo de C01 da HS COMPLETO, ambas no INTERNO. A regra antiga era ÷ 2 (÷ 1 para Gran Cursos). A descrição da aba Métricas da MATRIZ foi atualizada.
+**C01, Configuração de workflow (decisão de 14/10/2026).** Conta os tipos de workflow configurados, ou seja, com pelo menos um workflow na aba WORKFLOWS do INTERNO. Hoje todos os workflows de lá estão ENABLED.
+- **IGA e Ultimate (Máximo 4):** 1 ponto para cada tipo entre Onboard, Offboard e Move. Mais 1 ponto de bônus se a empresa tiver Férias e Afastamento (`ABSENT`) ou Pré-folha (`IDENTITY_SCREENING`). O bônus vale no máximo 1: é bom ter pelo menos um dos dois.
+- **SAG (Máximo 1):** o SAG tem direito a desligar pessoas pelo botão de offboard. Vale 100% se a empresa tiver workflow OFFBOARD ou algum disparo de Offboard na COBERTURA (botão), e 0% se não tiver.
+- **Empresa sem nenhum workflow:** fica com 0%, e não mais em branco.
+- **Onde está a regra:** coluna `Configuração WorKflow` da HEALTHSCORE e colunas AA e AB (Bruto e Máximo) da HS COMPLETO, ambas no INTERNO, além da descrição na aba Métricas da MATRIZ.
+- **Valores em 14/10/2026:** Blip 4/4. Gupy, Contabilizei e LG 3/4. Malga, G4 e Hubla 2/4. Sympla 0/4. Entre os SAG, Gran Cursos, Mercado Bitcoin e SolFacil 1/1; os demais 0/1.
+- **C01 não pesa nos planos SAG:** na aba Métricas, C01 está FALSE para Sec Automation, e o peso de C01 em Sec Automation e SAG Advanced é vazio. Para o C01 contar no SAG, é preciso marcar C01 como TRUE em Sec Automation e dar um peso em Pesos.
 
 **Engajamento só com E01 (decisão de 14/10/2026).** No desenho novo, o Engajamento tem uma nota só: E01, Satisfação DM/EB. O E02 (NPS) saiu do Health Score. Como ainda não há nenhuma nota de satisfação, o E01 fica em 30% (3 de 10) para todas as empresas até a regra ser definida.
 - **Consolidado da MATRIZ:** E01 = 0,3 fixo; a fórmula antiga, com o HAPPYSCORE mais recente ÷ 10, está no histórico de versões. A coluna E02 ficou vazia, sem fórmula; a coluna foi mantida para não deslocar o CONSOLIDADO do AM/TAM nem a Tendência. HealthScore e Health Score Ponderado leem E:V, e os Pesos C:T. Engajamento lê só V e Categorias T.
