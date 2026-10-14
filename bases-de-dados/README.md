@@ -86,7 +86,7 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 
 ### Problemas conhecidos (09/10/2026)
 
-- **Ponderado em erro nos planos SAG Advanced e IGA Essentials (14/10/2026).** Esses planos da carteira não existem nas abas Pesos e Categorias, que só têm FinOPs, Sec Automation, Identity Managment, Ultimate e Sec Automation Gran. Por isso Health Score Ponderado, Adoção, Configuração e Engajamento ficam em `#N/A` para essas empresas, e o Peso do Details fica vazio. O OKR AM KRA1 herda o erro. O HealthScore simples calcula. Antes de 14/10, o erro atingia todas as empresas porque o Consolidado lia a coluna E02, que a aba Métricas não tem. A Tendência tem valores sem erro até 02/10/2026; evitar gravar semanas com erro.
+- **Health Score sem erro desde 14/10/2026.** Antes, o Consolidado ficava em `#N/A` por dois motivos: lia a coluna E02, que a aba Métricas não tem, e os planos novos da carteira não existiam em Pesos e Categorias. Os dois foram corrigidos (ver "Planos novos em Pesos e Categorias"). A Tendência tem valores sem erro até 02/10/2026; a semana de 09/10 pode ter sido gravada com erro.
 - **Bruto de C05 não chega ao Details:** a Matriz usa o código `C05N` no lugar de `C05B`. As demais métricas da HS COMPLETO reproduzem a nota desde 14/10/2026.
 - **Métrica vazia vale 0 no ponderado.** Exemplo: sem NPS, uma empresa Sec Automation perde os 5 pontos de E02; Malga e G4 Educação ficam com cerca de metade do peso vazio.
 - **C04 sem teto** (Malga 104%).
@@ -154,7 +154,21 @@ Pontos que valem registrar:
 - **Consolidado da MATRIZ:** E01 = 0,3 fixo; a fórmula antiga, com o HAPPYSCORE mais recente ÷ 10, está no histórico de versões. A coluna E02 ficou vazia, sem fórmula; a coluna foi mantida para não deslocar o CONSOLIDADO do AM/TAM nem a Tendência. HealthScore e Health Score Ponderado leem E:V, e os Pesos C:T. Engajamento lê só V e Categorias T.
 - **Pesos:** o peso do E02 foi somado ao E01 e a coluna E02 ficou vazia. FinOPs 21%, Sec Automation 17%, Identity Managment 9%, Ultimate 5%, Sec Automation Gran 15%. O total de cada plano continua 100%.
 - **HS COMPLETO do INTERNO:** E01 = 3 / 10 para todas as empresas, por fórmula. As colunas do E02 foram apagadas, e a Matriz voltou a terminar em E01M (linha 55).
-- **Resultado em 14/10/2026:** o HealthScore simples voltou a calcular para todas as empresas. Ponderado, Adoção, Configuração e Engajamento calculam para as empresas Ultimate e ficam em `#N/A` para as SAG Advanced e IGA Essentials, porque esses planos não existem em Pesos e Categorias.
+- **Resultado em 14/10/2026:** HealthScore, Ponderado e as três categorias calculam para todas as empresas, depois da inclusão dos planos novos.
+
+**Planos novos em Pesos e Categorias (14/10/2026).** A carteira passou a usar os planos novos. A relação antigo → novo está na planilha "De-Para | Planos & Hubspot" (aba Theusview, https://docs.google.com/spreadsheets/d/1DuvD0r07yy7OGbjLuK_jJo_lbcJZiGBhnZDD0pamp9Y):
+
+| Plano antigo | Plano novo | Produto novo |
+|---|---|---|
+| Sec Automation | SAG Advanced | Software Access Governance |
+| Identity Managment | IGA Essentials | Identity Governance |
+| Ultimate | Ultimate | Identity Platform |
+
+- **Pesos e Categorias da MATRIZ:** ganharam as linhas SAG Advanced e IGA Essentials, com os mesmos pesos dos planos antigos correspondentes. Os pesos foram copiados como valores; a Categorias usa a mesma fórmula das outras linhas. As linhas antigas foram mantidas.
+- **Consolidado:** HealthScore, Ponderado, Adoção, Configuração e Engajamento leem as linhas 2 a 8 de Pesos e Categorias. Os planos novos usam o conjunto de métricas do plano antigo, ou seja, as colunas Sec Automation e Identity Managment da aba Métricas.
+- **Gran Cursos:** era Sec Automation Gran e virou SAG Advanced, então usa os pesos de Sec Automation. A linha Sec Automation Gran ficou sem uso.
+- **Malga:** no De-Para está como IGA Essentials (antes Ultimate), mas a carteira ainda mostra Ultimate em 14/10/2026.
+- **C01 nos planos SAG:** a regra de ÷ 1 não afeta a nota final hoje, porque C01 não faz parte do conjunto de métricas do Sec Automation (peso vazio).
 
 **Nomes de empresa divergem entre abas** (G4 e Grancursos, Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas, mas G4 e Grancursos exigem mapeamento manual. `Solfacil-POC` não é a Solfacil.
 
