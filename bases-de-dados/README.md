@@ -156,7 +156,7 @@ Pontos que valem registrar:
 - **HS COMPLETO do INTERNO:** E01 = 3 / 10 para todas as empresas, por fórmula. As colunas do E02 foram apagadas, e a Matriz voltou a terminar em E01M (linha 55).
 - **Resultado em 14/10/2026:** HealthScore, Ponderado e as três categorias calculam para todas as empresas, depois da inclusão dos planos novos.
 
-**Planos novos em Pesos e Categorias (14/10/2026).** A carteira passou a usar os planos novos. A relação antigo → novo está na planilha "De-Para | Planos & Hubspot" (aba Theusview, https://docs.google.com/spreadsheets/d/1DuvD0r07yy7OGbjLuK_jJo_lbcJZiGBhnZDD0pamp9Y):
+**Planos novos em Pesos e Categorias (14/10/2026).** A carteira passou a usar os planos novos. O catálogo completo é o campo **Plano** do negócio no HubSpot (`plano`): SAG Essentials, SAG Advanced, IGA Essentials, IGA Advanced e Ultimate (valor interno `identity_plataform`), além dos antigos Sec Automation (`saas_asset_management`), FinOps e Identity Managment (`idm`). A coluna Plano ID da CARTEIRA do AM/TAM traz esse valor interno, e a aba INFO do AM/TAM traduz para o nome e o produto. O ID de cada linha da CARTEIRA é o ID do negócio no HubSpot, não o da empresa. A relação antigo → novo está na planilha "De-Para | Planos & Hubspot" (aba Theusview, https://docs.google.com/spreadsheets/d/1DuvD0r07yy7OGbjLuK_jJo_lbcJZiGBhnZDD0pamp9Y):
 
 | Plano antigo | Plano novo | Produto novo |
 |---|---|---|
@@ -167,7 +167,8 @@ Pontos que valem registrar:
 - **Pesos e Categorias da MATRIZ:** ganharam as linhas SAG Advanced e IGA Essentials, com os mesmos pesos dos planos antigos correspondentes. Os pesos foram copiados como valores; a Categorias usa a mesma fórmula das outras linhas. As linhas antigas foram mantidas.
 - **Consolidado:** HealthScore, Ponderado, Adoção, Configuração e Engajamento leem as linhas 2 a 8 de Pesos e Categorias. Os planos novos usam o conjunto de métricas do plano antigo, ou seja, as colunas Sec Automation e Identity Managment da aba Métricas.
 - **Gran Cursos:** era Sec Automation Gran e virou SAG Advanced, então usa os pesos de Sec Automation. A linha Sec Automation Gran ficou sem uso.
-- **Malga:** no De-Para está como IGA Essentials (antes Ultimate), mas a carteira ainda mostra Ultimate em 14/10/2026.
+- **Malga:** passou de Ultimate para IGA Essentials em 14/10/2026, conforme o De-Para. A mudança foi feita no negócio Malga do HubSpot (ID 44566937104): campo Plano = IGA Essentials e Produto contratado = IGA (valor interno `IDM`). Também foi feita na coluna Plano ID da CARTEIRA do AM/TAM, que alimenta as outras planilhas.
+- **Planos sem empresa:** SAG Essentials e IGA Advanced também foram cadastrados em Pesos e Categorias, com os pesos em branco até a definição. As fórmulas dessas linhas usam IFERROR para não mostrar erro. No Consolidado, SAG Essentials usa o conjunto de métricas do Sec Automation e IGA Advanced o do Identity Managment, até a aba Métricas ganhar colunas próprias.
 - **C01 nos planos SAG:** a regra de ÷ 1 não afeta a nota final hoje, porque C01 não faz parte do conjunto de métricas do Sec Automation (peso vazio).
 
 **Nomes de empresa divergem entre abas** (G4 e Grancursos, Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas, mas G4 e Grancursos exigem mapeamento manual. `Solfacil-POC` não é a Solfacil.
