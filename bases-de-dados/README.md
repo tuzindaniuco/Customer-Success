@@ -67,8 +67,8 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 | A03 | Eficiência offboarding | ADOÇÃO SCORE da sexta mais recente (botão para Sec Automation, WORKFLOWS para os demais) | Δ sucesso / Δ iniciados de WORKFLOWS; vazio para Sec Automation |
 | A04 | Eficiência absent | WORKFLOWS, a partir de 04/08/2026 | Δ sucesso / Δ iniciados |
 | A05 | Eficiência move | WORKFLOWS | Δ sucesso / Δ iniciados |
-| A06 | Cobertura onboarding | ADOÇÃO SCORE: disparos ÷ admissões | Bruto copiado de A02; Máximo com `#REF!` |
-| A07 | Cobertura offboarding | ADOÇÃO SCORE: disparos ÷ demissões | Bruto copiado de A03; Máximo com `#REF!` |
+| A06 | Cobertura onboarding | ADOÇÃO SCORE: disparos ÷ admissões | disparos ONBOARD / movimentações de Admissão da COBERTURA, na janela da nota (desde 14/10/2026) |
+| A07 | Cobertura offboarding | ADOÇÃO SCORE: disparos ÷ demissões | disparos OFFBOARD / movimentações de Demissão da COBERTURA, na janela da nota (desde 14/10/2026) |
 | A08 | Providers homologados | homologados ÷ fornecedores | homologados / fornecedores |
 | A09 | E-mail pessoal | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
 | A10 | Desligados com acesso | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
@@ -87,7 +87,7 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 ### Problemas conhecidos (09/10/2026)
 
 - **Health Score em erro enquanto o Engajamento está em construção.** No Consolidado da MATRIZ, HealthScore e Health Score Ponderado ficam em `#N/A` e Engajamento em `#VALUE!` (o OKR AM KRA1 herda o erro) porque a aba Métricas ainda não tem a linha E02. É esperado: as métricas de Engajamento ainda estão sendo construídas (confirmado em 09/10/2026). A Tendência tem valores sem erro até 02/10/2026; evitar gravar semanas com erro.
-- **HS COMPLETO não reproduz a nota** em A03 (Sec Automation), A06, A07, C01, C02, C03 e E02; E01 não está na aba; a Matriz usa o código `C05N` no lugar de `C05B`, então o Bruto de C05 não chega ao Details.
+- **HS COMPLETO não reproduz a nota** em A03 (Sec Automation), C01, C02, C03 e E02; E01 não está na aba; a Matriz usa o código `C05N` no lugar de `C05B`, então o Bruto de C05 não chega ao Details.
 - **Métrica vazia vale 0 no ponderado.** Exemplo: sem NPS, uma empresa Sec Automation perde os 5 pontos de E02; Malga e G4 Educação ficam com cerca de metade do peso vazio.
 - **C04 sem teto** (Malga 104%).
 - **Dois status de projeto:** o Consolidado filtra pela tabela `info` do INTERNO e a Tendência usa a aba Info da MATRIZ; Hubla e Malga estão como Implantação numa e Ativado na outra.
@@ -138,6 +138,8 @@ Pontos que valem registrar:
 - Linhas sem funcionários na CARTEIRA ficam em branco. O denominador vem de outra fonte (FATURA) e pode ter um mês de defasagem.
 - A aba Tendência da planilha MATRIZ DE HEALTH SCORE guarda valores fixos das semanas anteriores (calculados por percentil); as semanas novas usam a escala por faixas, então as séries de A09, A10 e A11 não são comparáveis antes e depois de 09/10/2026.
 - A versão anterior das fórmulas (percentil) está no histórico de versões do Google Sheets.
+
+**HS Bruto de A06 e A07 = disparos e movimentações da COBERTURA (aplicado em 14/10/2026).** Antes, o Bruto de A06 e A07 na HS COMPLETO do INTERNO era cópia do Bruto de A02 e A03 (sucessos de WORKFLOWS) e o Máximo dava `#REF!`. Agora as colunas O a R usam a mesma conta da nota no ADOÇÃO SCORE: pegam a sexta mais recente com cobertura preenchida, montam a janela de 30 dias que termina 7 dias antes dela e somam na tabela `cobertura`. Bruto é `Disparos` com Tipo ONBOARD ou OFFBOARD; Máximo é `Movimentações` com Ação Admissão ou Demissão. Quando a nota está em branco, Bruto e Máximo também ficam em branco. Conferido em 14/10/2026: Bruto ÷ Máximo reproduz a nota nas 7 empresas com cobertura (exemplos: Gupy 9/12 = 75%, Blip 24/27 = 88,89%, Hubla offboarding 4/5 = 80%), e os códigos A06B, A06M, A07B e A07M chegam à Matriz. O desvio é `Máximo - Bruto`, ou seja, as movimentações que ficaram sem disparo.
 
 **Nomes de empresa divergem entre abas** (G4 e Grancursos, Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas, mas G4 e Grancursos exigem mapeamento manual. `Solfacil-POC` não é a Solfacil.
 
