@@ -40,7 +40,8 @@ Abas visíveis:
 - **COMPANIES_HISTORIC**: snapshot por empresa por data (`Data Execução` é data real). `Funcionários` traz um JSON por status; `#Funcionários` soma sem FIRED; `Hired`, `Absence` e `Fired` vêm separados, com os respectivos deltas.
 - **COBERTURA**: Data, Empresa, Ação, Tipo, Movimentações, Disparos, Rejeitados, Aguardando aprovação, Sem disparo, Sucesso. Tem as mesmas colunas da "Base cobertura diária" do relatório AM/CX (confirmar se é espelho; `metricas-cobertura/` neste repositório calcula a partir das abas de cobertura).
 - **LOGINS**: acessos por usuário e empresa, com últimos 30 dias, dias sem acesso e perfil.
-- **COMPLIANCE**, **CONTRATOS**, **USERS**, **GRUPOS**, **CONEXÕES DIRETAS**, **INFO**, **APOIO**, **HEALTHSCORE**, **HS COMPLETO**, **GROUPS**.
+- **INFO**: `IMPORTRANGE` da INFO do AM/TAM (fonte única, ver "INFO única no AM/TAM").
+- **COMPLIANCE**, **CONTRATOS**, **USERS**, **GRUPOS**, **CONEXÕES DIRETAS**, **APOIO**, **HEALTHSCORE**, **HS COMPLETO**, **GROUPS**.
 
 ## HEALTHSCORE ([NIUCO] MATRIZ DE HEALTH SCORE)
 
@@ -90,7 +91,7 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 - **Bruto de C05 não chega ao Details:** a Matriz usa o código `C05N` no lugar de `C05B`. As demais métricas da HS COMPLETO reproduzem a nota desde 14/10/2026.
 - **Métrica vazia vale 0 no ponderado.** Exemplo: sem NPS, uma empresa Sec Automation perde os 5 pontos de E02; Malga e G4 Educação ficam com cerca de metade do peso vazio.
 - **C04 sem teto** (Malga 104%).
-- **Status de projeto em dois lugares:** o Consolidado usa a tabela `info` do INTERNO (coluna Projeto da HEALTHSCORE), e a Tendência usa a aba Info da MATRIZ. Em 14/10/2026 as duas foram alinhadas para Hubla (Implantação), Sympla (Implantação) e Malga (Ativado), mas continuam sendo dois cadastros manuais.
+- **Status de projeto:** resolvido em 14/10/2026. Agora há uma fonte única, a INFO do AM/TAM (ver "INFO única no AM/TAM").
 - **Dois Health Scores em produção:** a CARTEIRA mostra o legado; os OKRs usam a MATRIZ. No legado, DOT Digital Group, G4 Educação e Blip ficam sem HS na CARTEIRA (nome diferente ou empresa ausente).
 
 ## AM/TAM ([AM/TAM] DATABASE)
@@ -180,6 +181,14 @@ Pontos que valem registrar:
 **Empresas em implantação fora do Health Score (corrigido em 14/10/2026).** A regra é que empresas com Projeto = Implantação não entram no Consolidado da MATRIZ. O filtro estava quebrado: quando a coluna Satisfação DM/EB entrou na HEALTHSCORE do INTERNO, o Projeto passou da coluna W para a X na aba Fonte, mas o Consolidado continuou filtrando a W (Adoção Automação, sempre vazia). Com isso, nenhuma empresa era excluída. Agora o Consolidado filtra `Fonte!X2:X<>"Implantação"`, e os cabeçalhos V, W e X da Fonte foram corrigidos. Na mesma data, Hubla e Sympla foram marcadas como Implantação na aba INFO do INTERNO (estavam como Ativado). O Consolidado passou de 16 para 14 empresas, e os OKRs do AM/TAM que fazem média dele também mudam.
 
 **G4 Educação na COBERTURA e na COBERTURA GRUPOS (corrigido em 14/10/2026).** O relatório AM/CX (Relatórios AM/CX 2026.Q3) traz o nome da plataforma, "G4". As abas COBERTURA e COBERTURA GRUPOS do INTERNO agora trocam "G4" por "G4 Educação" na importação, dentro do `IMPORTRANGE`. Não dá para trocar no relatório, porque a próxima carga sobrescreveria. Com isso, GRUPOS, ADOÇÃO SCORE e o botão de offboard do C01 enxergam a G4: o C02 dela passou a 100% (572/572). O A06 dela continua vazio porque a G4 não tem linhas de cobertura depois de 21/07/2026. Para outro nome divergente, como Grancursos, é só acrescentar a troca nessas duas fórmulas.
+
+**INFO única no AM/TAM (14/10/2026).** As três abas INFO foram concentradas em uma só, no mesmo modelo da CARTEIRA:
+- **Fonte:** a aba INFO do [AM/TAM] DATABASE (tabela `INFO`, colunas ID, Chave 1, Chave 2) é a única onde se edita. Nenhum cenário do Make escreve em INFO; é tudo digitado.
+- **Conteúdo:** as linhas que existiam só no INTERNO (usuários da plataforma por UUID e status de projeto por empresa) foram copiadas, como valores, para as linhas 142 a 326 da INFO do AM/TAM. Não há colisão: o AM/TAM busca por ID (código de fase, plano, ID de usuário do HubSpot e e-mail), e o INTERNO busca por Chave 1 (e-mail do usuário ou nome da empresa).
+- **INFO do INTERNO:** é `IMPORTRANGE` da tabela `INFO` do AM/TAM, em A2. A tabela `info` e as buscas `info[Chave 1]` → `info[Chave 2]` (Projeto na HEALTHSCORE, ADOÇÃO SCORE, WORKFLOWS) continuam iguais.
+- **Info da MATRIZ (Chave, Valor):** é `IMPORTRANGE` da INFO do AM/TAM filtrado pelas linhas de status (Chave 2 = Ativado, Implantação, Perdido ou POC). Ela alimenta a Tendência.
+- **Status de projeto por empresa:** edite na INFO do AM/TAM, na linha em que Chave 1 é o nome da empresa e Chave 2 é o status. Empresa com Implantação sai do Consolidado.
+- **Divergência resolvida:** a MATRIZ tinha DOT Digital Group como Implantação e o INTERNO como Perdido; ficou Perdido.
 
 **Nomes de empresa divergem entre abas** (Grancursos; G4 já é normalizada na importação, Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas, mas Grancursos exige mapeamento manual. `Solfacil-POC` não é a Solfacil.
 
