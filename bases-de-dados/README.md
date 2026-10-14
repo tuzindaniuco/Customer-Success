@@ -144,7 +144,7 @@ Pontos que valem registrar:
 **HS Bruto alinhado à nota em A03, C01, C02, C03, E01 e E02 (aplicado em 14/10/2026).** Na HS COMPLETO do INTERNO, Bruto ÷ Máximo passou a reproduzir a nota em todas as métricas (em C01, com teto de 100%). Quando a nota está em branco, Bruto e Máximo também ficam.
 - A03: soma Sucessos e Iniciados OFFBOARD na sexta mais recente usada pela nota, em `srbotton` para Sec Automation e em `adoção_sr` para os demais planos. Antes somava WORKFLOWS dos últimos 30 dias a partir de hoje, uma janela diferente da nota.
 - C01: ver "C01 dividido por 4" abaixo.
-- C02: Bruto é `Com grupo específico` e Máximo é `Pessoas na folha` da aba GRUPOS. Antes contava workflows de onboarding com grupo e grupos da empresa. A busca é pelo nome: G4 Educação não aparece porque a GRUPOS usa "G4" (ver "Nomes de empresa divergem").
+- C02: Bruto é `Com grupo específico` e Máximo é `Pessoas na folha` da aba GRUPOS. Antes contava workflows de onboarding com grupo e grupos da empresa. A busca é pelo nome. Desde 14/10/2026, a G4 é normalizada na importação e aparece como G4 Educação.
 - C03: Bruto lê a nota da HEALTHSCORE e Máximo é 1. O Bruto digitado antes estava desalinhado da nota em 8 empresas, provavelmente deslocado de linha.
 - E01 e E02: ver "Engajamento só com E01" abaixo.
 
@@ -181,7 +181,7 @@ Pontos que valem registrar:
 
 **G4 Educação na COBERTURA e na COBERTURA GRUPOS (corrigido em 14/10/2026).** O relatório AM/CX (Relatórios AM/CX 2026.Q3) traz o nome da plataforma, "G4". As abas COBERTURA e COBERTURA GRUPOS do INTERNO agora trocam "G4" por "G4 Educação" na importação, dentro do `IMPORTRANGE`. Não dá para trocar no relatório, porque a próxima carga sobrescreveria. Com isso, GRUPOS, ADOÇÃO SCORE e o botão de offboard do C01 enxergam a G4: o C02 dela passou a 100% (572/572). O A06 dela continua vazio porque a G4 não tem linhas de cobertura depois de 21/07/2026. Para outro nome divergente, como Grancursos, é só acrescentar a troca nessas duas fórmulas.
 
-**Nomes de empresa divergem entre abas** (Grancursos; G4 já é normalizada na importação, Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas, mas G4 e Grancursos exigem mapeamento manual. `Solfacil-POC` não é a Solfacil.
+**Nomes de empresa divergem entre abas** (Grancursos; G4 já é normalizada na importação, Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas, mas Grancursos exige mapeamento manual. `Solfacil-POC` não é a Solfacil.
 
 **Valores inválidos conhecidos.** COMPANIES_HISTORIC e as abas de cobertura do relatório têm datas impossíveis em algumas linhas (ano 1000, 1986, 2027); desconsidere ao calcular.
 
