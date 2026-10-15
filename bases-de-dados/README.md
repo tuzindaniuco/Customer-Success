@@ -310,7 +310,7 @@ O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
 - **Faixa:** escolhida pela distribuição dos homologados, em que metade das empresas fica entre 5% e 30%.
 - **HS COMPLETO:** Bruto = conexões diretas (coluna AI) e Máximo = fornecedores homologados (coluna AJ), que antes ficava vazio.
 - **Métricas:** o Cálculo tem as faixas e um exemplo: Blip tem 21 diretas e 74 homologados, 28,4%, nota 60%.
-- **Notas em 15/10/2026:**
+- **Notas em 15/10/2026, antes da correção do Make (ver abaixo):**
   - 100%: Contabilizei, Superlogica, Malga, G4 e Jusbrasil.
   - 80%: Gupy.
   - 60%: Mercado Bitcoin, Blip, Hubla e Sympla.
@@ -318,6 +318,30 @@ O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
   - 20%: SolFacil e OLX.
   - 0%: Bionexo e Ebanx.
 - **OKRs:** KRA1 foi de 47% para 47,42% e KRT1 de 58,66% para 60,8%. KRT2 ficou em 47,49%.
+
+**Conexões Diretas da PROVIDERS corrigida no Make (15/10/2026).** A PROVIDERS do INTERNO é gravada pelo cenário "[BackOffice -> Sheets] Providers" (Make 4513382), em dias úteis às 06:00. Ele lê `GET /companies/{id}/providers` do BackOffice. A variável `conexoes_diretas` (módulo 16) conta os providers cuja `source` não está numa lista de exclusão.
+- **Bug:** quase todos os itens `sso-google-<cliente>` da lista começavam com espaço (`" sso-google-mb"`). Por isso, não removiam nada, e os apps vistos pelo SSO Google contavam como conexão direta.
+- **Correção:** os espaços foram tirados. Também entraram `jumpcloud` (por decisão, JumpCloud é SSO e não conexão direta) e `sso-google-blip.ai`, que faltava.
+- **Regra:** conexão direta é um provider com conector próprio (sem `source`, como GitHub, Slack, Microsoft 365, AWS IAM e HubSpot) ou vindo de um conector de SaaS (`atlassian`, `gsuite-<cliente>`, `conector-adobe`). Não contam: `manual`, `compliance-*`, `sso-*` e `jumpcloud`.
+- **Cliente novo com SSO Google:** a fonte `sso-google-<nome>` precisa entrar na lista. Sem isso, os apps do SSO contam como diretos. Para conferir, use a coluna Conexões da PROVIDERS, que lista as fontes de cada empresa.
+- **Conferido no Mercado Bitcoin:** de 419 providers, ficaram 25 sem fonte, 12 `atlassian` e 3 `gsuite-mb`, total 40 (antes 81). Saíram 32 `jumpcloud` e 9 `sso-google-mb`.
+- **Mudanças nas conexões diretas:**
+  - Mercado Bitcoin: 81 → 40.
+  - Contabilizei: 54 → 16.
+  - Superlogica: 51 → 25.
+  - Jusbrasil: 40 → 25.
+  - Gupy: 27 → 18.
+  - G4: 28 → 23.
+  - Malga: 20 → 18.
+  - Hubla: 20 → 17.
+  - Blip: 21 → 20.
+- **Efeito na C06:**
+  - Mercado Bitcoin: 60% → 20%.
+  - Contabilizei: 100% → 60%.
+  - Gupy: 80% → 60%.
+  - Superlogica: 100% → 80%.
+  - Jusbrasil: 100% → 80%.
+- **OKRs:** KRA1 foi de 47,42% para 46,9% e KRT1 de 60,8% para 58,16%.
 
 **Coluna Média de Pesos e Categorias (15/10/2026).** A Média passou a ser 1 ÷ número de métricas TRUE do plano na aba Métricas, ou seja, quanto cada métrica vale no HealthScore simples. A fórmula busca a coluna do Plano ID na Métricas. Antes, a Pesos contava só as métricas com peso (o SAG Advanced dava 1/9 com 12 métricas TRUE), e a Categorias tinha 5,56% em todas as linhas. Valores: SAG Essentials 12,50% (8 métricas), SAG Advanced 8,33% (12), IGA Essentials 6,67% (15), IGA Advanced 6,25% (16), Ultimate 5,56% (18). É informativa e não entra no cálculo.
 
