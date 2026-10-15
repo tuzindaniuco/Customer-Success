@@ -77,8 +77,8 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 | C01 | Configuração de workflow | IGA/Ultimate: (Onboard + Offboard + Move + bônus) ÷ 4; SAG: tem offboard ÷ 1 | pontos / 4 (1 nos planos SAG) |
 | C02 | Cobertura de grupos | GRUPOS: pessoas na folha em grupo específico ÷ pessoas na folha | Com grupo específico / Pessoas na folha (GRUPOS) |
 | C03 | Organograma | digitado à mão | nota da HEALTHSCORE / 1 |
-| C04 | Contratos ativos | contratos ativos ÷ conexões NoShadow, sem teto | ativos / NoShadow |
-| C05 | Gastos cadastrados | ativos com gasto ÷ conexões NoShadow | ativos com gasto / NoShadow |
+| C04 | Contratos ativos | contratos ativos ÷ conexões NoShadow, com teto de 100% desde 15/10/2026 | ativos / NoShadow |
+| C05 | Gastos cadastrados | ativos com gasto ÷ conexões NoShadow, com teto de 100% desde 15/10/2026 | ativos com gasto / NoShadow |
 | C06 | Conexões diretas | quantidade de conexões diretas (PROVIDERS), por faixas da FAIXAS HS (versão de 15/10/2026, à tarde) | conexões diretas / 31 (a quantidade que dá 100%) |
 | E01 | Satisfação DM/EB | fixa em 30% para todas as empresas (Consolidado da MATRIZ) | 3 / 10 fixo (colunas BA a BC) |
 | E02 | NPS | removida em 14/10/2026 | removida |
@@ -92,7 +92,7 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 - **Health Score sem erro desde 14/10/2026.** Antes, o Consolidado ficava em `#N/A` por dois motivos: lia a coluna E02, que a aba Métricas não tem, e os planos novos da carteira não existiam em Pesos e Categorias. Os dois foram corrigidos (ver "Planos novos em Pesos e Categorias"). A Tendência tem valores sem erro até 02/10/2026; a semana de 09/10 pode ter sido gravada com erro.
 - **Bruto de C05 no Details:** corrigido em 15/10/2026. A Matriz usava o código `C05N` no lugar de `C05B`.
 - **Métrica vazia vale 0 no ponderado.** Exemplo: sem NPS, uma empresa Sec Automation perde os 5 pontos de E02; Malga e G4 Educação ficam com cerca de metade do peso vazio.
-- **C04 sem teto** (Malga 104%).
+- **C04 e C05 com teto de 100% desde 15/10/2026.** Antes, a Malga tinha 114% e 110%. O Bruto do HS COMPLETO continua mostrando o valor real (24/21 e 23/21).
 - **Status de projeto:** resolvido em 14/10/2026. Agora há uma fonte única, a INFO do AM/TAM (ver "INFO única no AM/TAM").
 - **Dois Health Scores em produção:** a CARTEIRA mostra o legado; os OKRs usam a MATRIZ. No legado, DOT Digital Group, G4 Educação e Blip ficam sem HS na CARTEIRA (nome diferente ou empresa ausente).
 
