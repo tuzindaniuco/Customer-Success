@@ -35,7 +35,7 @@ Abas visíveis:
 - **WORKFLOWS**: um snapshot por workflow por dia de execução, com contadores acumulados (Erros, Falhas, Na Fila, Sucesso, Execuções, Iniciados, Concluídos) e deltas contra o snapshot anterior (`Delta Iniciados`, `Delta Success`, `Delta Failed`, `Delta Fila`, `Delta Rejected`, `Delta Aborted`, `Delta Success Rate`). Tipos: ONBOARD, OFFBOARD, ABSENT, MOVE, IDENTITY_SCREENING.
 - **SUCCESS RATE WORKFLOW** e **SUCCESS RATE BOTTON**: Week, TAM, Plano, Empresa, Data, Tipo, Iniciados, Sucessos, Eficiência, Projeto. Agregam os deltas de WORKFLOWS em janela móvel de cerca de 31 dias, atualizada às sextas (datas da aba APOIO). `SUCCESS RATE BOTTON` é a versão do botão de offboard.
 - **ADOÇÃO SCORE**: por semana, Success Rate (onboarding, offboarding, F&A, move, pré-folha), cobertura de onboarding e offboarding e Adoção Score, com deltas.
-- **FAIXAS HS**: faixas de pontuação das métricas A09 (Desligados com acesso) e A10 (Desligados que acessaram) do HEALTHSCORE (limite em % dos funcionários e pontos). O bloco de e-mail pessoal ficou sem uso desde 15/10/2026.
+- **FAIXAS HS**: faixas de pontuação das métricas A09 (Desligados com acesso) e A10 (Desligados que acessaram) do HEALTHSCORE (limite em % dos funcionários e pontos). O bloco de e-mail pessoal ficou sem uso desde 15/10/2026. Nas colunas J e K fica a faixa da C06 (Conexões diretas), em que mais é melhor.
 - **COMPANIES**: uma linha por empresa (compliance, passo de onboarding, organograma, autorização, SSO, feature flags, funcionários, suporte).
 - **COMPANIES_HISTORIC**: snapshot por empresa por data (`Data Execução` é data real). `Funcionários` traz um JSON por status; `#Funcionários` soma sem FIRED; `Hired`, `Absence` e `Fired` vêm separados, com os respectivos deltas.
 - **COBERTURA**: Data, Empresa, Ação, Tipo, Movimentações, Disparos, Rejeitados, Aguardando aprovação, Sem disparo, Sucesso. Tem as mesmas colunas da "Base cobertura diária" do relatório AM/CX (confirmar se é espelho; `metricas-cobertura/` neste repositório calcula a partir das abas de cobertura).
@@ -79,7 +79,7 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 | C03 | Organograma | digitado à mão | nota da HEALTHSCORE / 1 |
 | C04 | Contratos ativos | contratos ativos ÷ conexões NoShadow, sem teto | ativos / NoShadow |
 | C05 | Gastos cadastrados | ativos com gasto ÷ conexões NoShadow | ativos com gasto / NoShadow |
-| C06 | Conexões diretas | percentil entre as empresas (mais é melhor) | quantidade / vazio |
+| C06 | Conexões diretas | conexões diretas ÷ fornecedores homologados (PROVIDERS), por faixas da FAIXAS HS, desde 15/10/2026 | conexões diretas / fornecedores homologados |
 | E01 | Satisfação DM/EB | fixa em 30% para todas as empresas (Consolidado da MATRIZ) | 3 / 10 fixo (colunas BA a BC) |
 | E02 | NPS | removida em 14/10/2026 | removida |
 
@@ -294,6 +294,30 @@ O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
 - **Tendência:** o histórico do e-mail pessoal foi perdido junto com a coluna. Nas semanas anteriores a 15/10, as colunas A09 e A10 já guardam Desligados com acesso e Desligados que acessaram (o rótulo mudou, o dado não).
 - **Conferido em 15/10/2026:** HealthScore, Ponderado e categorias iguais aos de antes (Bionexo 38,56% / 29,74%, Gupy 78,25% / 64,03%, Blip 69,42% / 71,31%). OKRs iguais: KRA1 47%, KRT1 58,66%, KRT2 47,49%.
 - **Fora do escopo:** a Calculadora (oculta) não foi atualizada, e o bloco de e-mail pessoal da FAIXAS HS ficou sem uso.
+
+**C06, Conexões diretas, por faixas (15/10/2026).** A C06 deixou de usar percentil entre as empresas, que mudava a nota de uma empresa quando as outras mudavam. Agora a nota vem da proporção Conexões Diretas ÷ Fornecedores Homologados da aba PROVIDERS do INTERNO, limitada a 100%. A proporção vira pontos pelas faixas das colunas J e K da FAIXAS HS. Cada faixa vale a partir do limite, inclusive.
+
+| Proporção | Pontos |
+|---|---|
+| 60% ou mais | 100% |
+| 40% ou mais | 80% |
+| 25% ou mais | 60% |
+| 15% ou mais | 40% |
+| 8% ou mais | 20% |
+| menos de 8% | 0% |
+
+- **Por que homologados:** com Conexões NoShadow no denominador, Gupy, Contabilizei e G4 tiravam 100%, porque não têm cadastro manual. Com homologados, a Gupy cai para 44%. Contabilizei, G4 e Malga continuam em 100%, porque só homologaram o que veio pela conexão direta; elas já perdem na A08.
+- **Faixa:** escolhida pela distribuição dos homologados, em que metade das empresas fica entre 5% e 30%.
+- **HS COMPLETO:** Bruto = conexões diretas (coluna AI) e Máximo = fornecedores homologados (coluna AJ), que antes ficava vazio.
+- **Métricas:** o Cálculo tem as faixas e um exemplo: Blip tem 21 diretas e 74 homologados, 28,4%, nota 60%.
+- **Notas em 15/10/2026:**
+  - 100%: Contabilizei, Superlogica, Malga, G4 e Jusbrasil.
+  - 80%: Gupy.
+  - 60%: Mercado Bitcoin, Blip, Hubla e Sympla.
+  - 40%: Gran Cursos e LG.
+  - 20%: SolFacil e OLX.
+  - 0%: Bionexo e Ebanx.
+- **OKRs:** KRA1 foi de 47% para 47,42% e KRT1 de 58,66% para 60,8%. KRT2 ficou em 47,49%.
 
 **Nomes de empresa divergem entre abas** (G4 e Grancursos já são normalizadas na importação da COBERTURA; Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas. `Solfacil-POC` não é a Solfacil.
 
