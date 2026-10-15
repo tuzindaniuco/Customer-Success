@@ -380,7 +380,8 @@ O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
   - Volumetria = solicitações ÷ Funcionários da CARTEIRA, pela faixa das colunas M e N da FAIXAS HS: a partir de 10% = 100%; 5% = 75%; 2% = 50%; acima de 0 = 25%.
 - **BON2 (API) = eficiência × volumetria,** últimos 30 dias pela Última chamada de cada linha. A base é consolidada por chave, endpoint e status, então a janela é aproximada.
   - Eficiência = chamadas com HTTP 2xx ÷ total de chamadas da empresa.
-  - Volumetria = chamadas com sucesso, pela faixa das colunas P e Q da FAIXAS HS: a partir de 1.000 = 100%; 500 = 75%; 100 = 50%; 1 = 25%.
+  - Volumetria = chamadas com sucesso, pela faixa das colunas P e Q da FAIXAS HS: a partir de 4.000 = 100%; 2.000 = 75%; 400 = 50%; 1 = 25%.
+  - Em 15/10/2026, os limites foram multiplicados por 4 (antes eram 1.000, 500, 100 e 1). Motivo: o uso da OLX se concentrou em uma semana, e um mês de uso naquele ritmo é o que deve valer 100%.
   - A empresa é localizada pelo nome exato. A LogComex aparece como "LogComex (company não encontrada na base)" e não casa com nenhuma empresa.
 - **Sem uso na janela:** o bônus fica vazio.
 - **INTERNO:**
@@ -399,7 +400,7 @@ O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
 - **AM/TAM:** o CONSOLIDADO ganhou as colunas BON1, BON2, Bônus e Health Score + Bônus. O import busca pelo cabeçalho. Os OKRs continuam no Ponderado, na Adoção e na Configuração, sem bônus.
 - **Valores em 15/10/2026:**
   - LG: BON1 = 90,79% (651 de 717 positivas; 750 solicitações para 812 funcionários), Bônus +4,54, Health Score + Bônus = 64,63%.
-  - OLX: BON2 = 99,59% (1.693 de 1.700 chamadas), Bônus +4,98, Health Score + Bônus = 35,39%.
+  - OLX: eficiência de 99,59% (1.693 de 1.700 chamadas). Com volumetria de 50% (faixa 400–1.999), BON2 = 49,79%, Bônus +2,49 e Health Score + Bônus = 32,9%.
   - As chamadas da OLX são de 16 e 17/09 e saem da janela em 17/10, se a base não for atualizada.
 - **OKRs, com os pesos dos planos SAG que o usuário reorganizou no mesmo dia:** KRA1 = 46,61%, KRT1 = 64,35% e KRT2 = 45,62%.
 
