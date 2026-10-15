@@ -35,7 +35,7 @@ Abas visíveis:
 - **WORKFLOWS**: um snapshot por workflow por dia de execução, com contadores acumulados (Erros, Falhas, Na Fila, Sucesso, Execuções, Iniciados, Concluídos) e deltas contra o snapshot anterior (`Delta Iniciados`, `Delta Success`, `Delta Failed`, `Delta Fila`, `Delta Rejected`, `Delta Aborted`, `Delta Success Rate`). Tipos: ONBOARD, OFFBOARD, ABSENT, MOVE, IDENTITY_SCREENING.
 - **SUCCESS RATE WORKFLOW** e **SUCCESS RATE BOTTON**: Week, TAM, Plano, Empresa, Data, Tipo, Iniciados, Sucessos, Eficiência, Projeto. Agregam os deltas de WORKFLOWS em janela móvel de cerca de 31 dias, atualizada às sextas (datas da aba APOIO). `SUCCESS RATE BOTTON` é a versão do botão de offboard.
 - **ADOÇÃO SCORE**: por semana, Success Rate (onboarding, offboarding, F&A, move, pré-folha), cobertura de onboarding e offboarding e Adoção Score, com deltas.
-- **FAIXAS HS**: faixas de pontuação das métricas A09, A10 e A11 do HEALTHSCORE (limite em % dos funcionários e pontos).
+- **FAIXAS HS**: faixas de pontuação das métricas A09 (Desligados com acesso) e A10 (Desligados que acessaram) do HEALTHSCORE (limite em % dos funcionários e pontos). O bloco de e-mail pessoal ficou sem uso desde 15/10/2026.
 - **COMPANIES**: uma linha por empresa (compliance, passo de onboarding, organograma, autorização, SSO, feature flags, funcionários, suporte).
 - **COMPANIES_HISTORIC**: snapshot por empresa por data (`Data Execução` é data real). `Funcionários` traz um JSON por status; `#Funcionários` soma sem FIRED; `Hired`, `Absence` e `Fired` vêm separados, com os respectivos deltas.
 - **COBERTURA**: Data, Empresa, Ação, Tipo, Movimentações, Disparos, Rejeitados, Aguardando aprovação, Sem disparo, Sucesso. Tem as mesmas colunas da "Base cobertura diária" do relatório AM/CX (confirmar se é espelho; `metricas-cobertura/` neste repositório calcula a partir das abas de cobertura).
@@ -45,7 +45,7 @@ Abas visíveis:
 
 ## HEALTHSCORE ([NIUCO] MATRIZ DE HEALTH SCORE)
 
-- **Métricas**: dicionário dos critérios. Adoção: A01 Login Frequência (logins únicos/22), A02 a A05 eficiência de workflow (onboarding, offboarding, absence, move; média de sucesso dos últimos 30 dias), A06 e A07 cobertura de onboarding e offboarding, A08 providers homologados, A09 a A11 e-mail pessoal, desligados com acesso e desligados que acessaram (faixas de proporção desde 09/10/2026; a descrição na aba ainda fala em percentil). Configuração: C01 a C06. Engajamento: E01 (satisfação DM/EB, do HAPPYSCORE). A linha E02 (NPS) não existe na aba em 09/10/2026, embora Pesos, Categorias e Consolidado tenham E02 (ver "Problemas conhecidos").
+- **Métricas**: dicionário dos critérios. Adoção: A01 Login Frequência (logins únicos/22), A02 a A05 eficiência de workflow (onboarding, offboarding, absence, move; média de sucesso dos últimos 30 dias), A06 e A07 cobertura de onboarding e offboarding, A08 providers homologados, A09 desligados com acesso, A10 desligados que acessaram (faixas de proporção desde 09/10/2026), A11 eficiência pré-folha. A antiga A09 (e-mail pessoal) foi excluída em 15/10/2026 e os códigos foram renumerados. Configuração: C01 a C06. Engajamento: E01 (satisfação DM/EB, do HAPPYSCORE). A linha E02 (NPS) não existe na aba em 09/10/2026, embora Pesos, Categorias e Consolidado tenham E02 (ver "Problemas conhecidos").
 - **Pesos** e **Categorias**: peso de cada critério por plano (FinOPs, Sec Automation, Identity Managment, Ultimate, Sec Automation Gran) e por categoria.
 - **Matriz**, **Details**, **Consolidado**, **Tendência** (semanal): pontuação por empresa, `HealthScore` e `Health Score Ponderado`, com Adoção, Configuração e Engajamento.
 - Ocultas: Fonte, Calculadora, Carteira.
@@ -71,25 +71,24 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 | A06 | Cobertura onboarding | ADOÇÃO SCORE: disparos ÷ admissões | disparos ONBOARD / movimentações de Admissão da COBERTURA, na janela da nota (desde 14/10/2026) |
 | A07 | Cobertura offboarding | ADOÇÃO SCORE: disparos ÷ demissões | disparos OFFBOARD / movimentações de Demissão da COBERTURA, na janela da nota (desde 14/10/2026) |
 | A08 | Providers homologados | homologados ÷ fornecedores | homologados / fornecedores |
-| A09 | E-mail pessoal | **fora do cálculo desde 15/10/2026** (FALSE em todos os planos e sem peso); a coluna continua calculada no INTERNO por faixas da FAIXAS HS | infratores / teto de infratores para 100% |
-| A10 | Desligados com acesso | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
-| A11 | Desligados que acessaram | faixas da FAIXAS HS | infratores / teto (0) |
-| A12 | Eficiência pré-folha | sucesso ÷ iniciados de WORKFLOWS do tipo IDENTITY_SCREENING, últimos 30 dias (a partir de 16/04/2026), mesma regra da A05 | Δ sucesso / Δ iniciados (colunas BG a BI da HS COMPLETO; códigos A12, A12B e A12M na Matriz) |
+| A09 | Desligados com acesso | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
+| A10 | Desligados que acessaram | faixas da FAIXAS HS | infratores / teto (0) |
+| A11 | Eficiência pré-folha | sucesso ÷ iniciados de WORKFLOWS do tipo IDENTITY_SCREENING, últimos 30 dias (a partir de 16/04/2026), mesma regra da A05 | Δ sucesso / Δ iniciados (colunas BD a BF da HS COMPLETO; códigos A11, A11B e A11M na Matriz) |
 | C01 | Configuração de workflow | IGA/Ultimate: (Onboard + Offboard + Move + bônus) ÷ 4; SAG: tem offboard ÷ 1 | pontos / 4 (1 nos planos SAG) |
 | C02 | Cobertura de grupos | GRUPOS: pessoas na folha em grupo específico ÷ pessoas na folha | Com grupo específico / Pessoas na folha (GRUPOS) |
 | C03 | Organograma | digitado à mão | nota da HEALTHSCORE / 1 |
 | C04 | Contratos ativos | contratos ativos ÷ conexões NoShadow, sem teto | ativos / NoShadow |
-| C05 | Gastos cadastrados | ativos com gasto ÷ conexões NoShadow | ativos com gasto / NoShadow (código `C05N` na Matriz) |
+| C05 | Gastos cadastrados | ativos com gasto ÷ conexões NoShadow | ativos com gasto / NoShadow |
 | C06 | Conexões diretas | percentil entre as empresas (mais é melhor) | quantidade / vazio |
-| E01 | Satisfação DM/EB | fixa em 30% para todas as empresas (Consolidado da MATRIZ) | 3 / 10 fixo (colunas BD a BF) |
+| E01 | Satisfação DM/EB | fixa em 30% para todas as empresas (Consolidado da MATRIZ) | 3 / 10 fixo (colunas BA a BC) |
 | E02 | NPS | removida em 14/10/2026 | removida |
 
-**Semântica da HS Bruto.** `Máximo` é o valor de `Bruto` que levaria a nota a 100%. Nas métricas em que mais é melhor, é o denominador (exemplo: A08, homologados / fornecedores). Em A09, A10 e A11, em que menos é melhor, é o teto de infratores para ficar na faixa de 100%: arredondar para baixo (limite da faixa de 100% × funcionários da CARTEIRA). Nesses três, o desvio é `Bruto - Máximo` (quantos infratores precisam sair); nos demais, `Máximo - Bruto`. Atualizado em 09/10/2026: antes, o Máximo de A09, A10 e A11 era 0 digitado.
+**Semântica da HS Bruto.** `Máximo` é o valor de `Bruto` que levaria a nota a 100%. Nas métricas em que mais é melhor, é o denominador (exemplo: A08, homologados / fornecedores). Em A09 e A10 (códigos atuais), em que menos é melhor, é o teto de infratores para ficar na faixa de 100%: arredondar para baixo (limite da faixa de 100% × funcionários da CARTEIRA). Nesses dois, o desvio é `Bruto - Máximo` (quantos infratores precisam sair); nos demais, `Máximo - Bruto`. Atualizado em 09/10/2026: antes, o Máximo de A09, A10 e A11 era 0 digitado.
 
 ### Problemas conhecidos (09/10/2026)
 
 - **Health Score sem erro desde 14/10/2026.** Antes, o Consolidado ficava em `#N/A` por dois motivos: lia a coluna E02, que a aba Métricas não tem, e os planos novos da carteira não existiam em Pesos e Categorias. Os dois foram corrigidos (ver "Planos novos em Pesos e Categorias"). A Tendência tem valores sem erro até 02/10/2026; a semana de 09/10 pode ter sido gravada com erro.
-- **Bruto de C05 não chega ao Details:** a Matriz usa o código `C05N` no lugar de `C05B`. As demais métricas da HS COMPLETO reproduzem a nota desde 14/10/2026.
+- **Bruto de C05 no Details:** corrigido em 15/10/2026. A Matriz usava o código `C05N` no lugar de `C05B`.
 - **Métrica vazia vale 0 no ponderado.** Exemplo: sem NPS, uma empresa Sec Automation perde os 5 pontos de E02; Malga e G4 Educação ficam com cerca de metade do peso vazio.
 - **C04 sem teto** (Malga 104%).
 - **Status de projeto:** resolvido em 14/10/2026. Agora há uma fonte única, a INFO do AM/TAM (ver "INFO única no AM/TAM").
@@ -154,7 +153,7 @@ Pontos que valem registrar:
 - **IGA e Ultimate (Máximo 4):** 1 ponto para cada tipo entre Onboard, Offboard e Move. Mais 1 ponto de bônus se a empresa tiver Férias e Afastamento (`ABSENT`) ou Pré-folha (`IDENTITY_SCREENING`). O bônus vale no máximo 1: é bom ter pelo menos um dos dois.
 - **SAG (Máximo 1):** o SAG tem direito a desligar pessoas pelo botão de offboard. Vale 100% se a empresa tiver workflow OFFBOARD ou algum disparo de Offboard na COBERTURA (botão), e 0% se não tiver.
 - **Empresa sem nenhum workflow:** fica com 0%, e não mais em branco.
-- **Onde está a regra:** coluna `Configuração WorKflow` da HEALTHSCORE e colunas AA e AB (Bruto e Máximo) da HS COMPLETO, ambas no INTERNO, além da descrição na aba Métricas da MATRIZ.
+- **Onde está a regra:** coluna `Configuração WorKflow` da HEALTHSCORE e colunas Y e Z (Bruto e Máximo) da HS COMPLETO, desde 15/10/2026, ambas no INTERNO, além da descrição na aba Métricas da MATRIZ.
 - **Valores em 14/10/2026:** Blip 4/4. Gupy, Contabilizei e LG 3/4. Malga, G4 e Hubla 2/4. Sympla 0/4. Entre os SAG, Gran Cursos, Mercado Bitcoin e SolFacil 1/1; os demais 0/1.
 - **C01 no SAG Advanced (14/10/2026):** o C01 passou a contar no SAG Advanced. Na aba Métricas, C01 ficou TRUE na coluna Sec Automation, que também define o conjunto de métricas do SAG Advanced e do SAG Essentials. Em Pesos, a linha SAG Advanced ganhou 8% de C01, tirados da própria Configuração, que continua com 34% no total: C03 e C04 foram de 9% para 7%, e C05 e C06 de 8% para 6%. Adoção (49%) e Engajamento (17%) não mudaram. A linha antiga Sec Automation ficou sem peso de C01.
 
@@ -201,7 +200,7 @@ Pontos que valem registrar:
 - **Cópias do catálogo:** a aba CATÁLOGO PLANOS do INTERNO (tabela `planos`) e a aba Catálogo Planos da MATRIZ (tabela `planos`) são `IMPORTRANGE` do catálogo.
 - **CARTEIRA do AM/TAM:** Plano e Produto (colunas T e U) vêm do catálogo pelo Plano ID (coluna X). O Produto passou a aparecer como SAG, IGA ou SAG, IGA. As linhas de plano da INFO foram apagadas.
 - **INTERNO:** nenhuma fórmula tem nome de plano escrito. As regras consultam o catálogo:
-  - C01 na HEALTHSCORE e na HS COMPLETO (colunas AA e AB);
+  - C01 na HEALTHSCORE e na HS COMPLETO (colunas Y e Z desde 15/10/2026);
   - A06 na HEALTHSCORE;
   - A03 Bruto e Máximo na HS COMPLETO (colunas I e J);
   - ADOÇÃO SCORE (colunas D, F, H e Q);
@@ -228,7 +227,7 @@ Pontos que valem registrar:
 
 Agora o A2 do CONSOLIDADO importa `Consolidado!A1:AZ1000` com o cabeçalho e escolhe cada coluna pelo nome do cabeçalho do próprio CONSOLIDADO. Coluna que não existe na MATRIZ, como o E02, fica em branco. Valores corrigidos em 14/10: KRA1 50,79%, KRT1 56,43% e KRT2 52,13%. Lição: no Sheets não existem `DROP` nem `XMATCH`, e o `LET` não aceita nome de variável que pareça endereço de célula (`b2`) ou que repita nome de tabela (`pesos`).
 
-**A12, Eficiência Workflow Pré-folha (criada em 14/10/2026).** Mede o sucesso dos workflows de pré-folha (`IDENTITY_SCREENING`), com a mesma regra da A05 (Move).
+**A12, Eficiência Workflow Pré-folha (criada em 14/10/2026; hoje A11).** Mede o sucesso dos workflows de pré-folha (`IDENTITY_SCREENING`), com a mesma regra da A05 (Move).
 - **Métricas:** categoria Adoção. TRUE em IGA Essentials, IGA Advanced e identity_plataform; FALSE nos planos SAG, que não têm pré-folha.
 - **Peso:** 2% no IGA Essentials e no Ultimate, tirados de A02 e A03 (1 ponto de cada). O total da Adoção não muda. Critério: pré-folha é bônus de IGA, da família de eficiência de workflow. SAG fica com 0%. Os pesos de IGA Advanced continuam em aberto.
 - **Efeito no Ponderado:**
@@ -243,11 +242,11 @@ Agora o A2 do CONSOLIDADO importa `Consolidado!A1:AZ1000` com o cabeçalho e esc
   KRA1 foi para 50,56%. O "vale 0 quando vazio" é a regra de métrica vazia, que está em aberto no ClickUp.
 - **A04 e A05:** em 14/10/2026, o usuário marcou A04 (Férias/Afastamento) e A05 (Move) como TRUE para IGA e Ultimate na aba Métricas. Elas entram no HealthScore simples, mas continuam com peso 0.
 
-**Como adicionar uma métrica nova (roteiro usado na A12).**
+**Como adicionar uma métrica nova (roteiro usado na A12, hoje A11).**
 1. **INTERNO, HEALTHSCORE:** inserir a coluna da nota no lugar certo da ordem (a A12 ficou depois da A11). A tabela cresce sozinha, e as referências de outras fórmulas se ajustam.
-2. **INTERNO, HS COMPLETO:** acrescentar nota, Bruto e Máximo **no fim da tabela** (colunas novas depois de BF), para não deslocar a Matriz.
-3. **MATRIZ, Fonte:** corrigir os cabeçalhos, que andam uma coluna (hoje Projeto está na Y).
-4. **MATRIZ, Consolidado:** inserir a coluna com o código da métrica na mesma posição e ajustar o filtro do A2 (hoje `filter(Fonte!A2:V; Fonte!B2:B<>""; Fonte!Y2:Y<>"Implantação")`). As fórmulas genéricas se ajustam sozinhas.
+2. **INTERNO, HS COMPLETO:** acrescentar nota, Bruto e Máximo **no fim da tabela** (colunas novas depois de BF, em 15/10/2026), para não deslocar a Matriz.
+3. **MATRIZ, Fonte:** corrigir os cabeçalhos, que andam uma coluna (hoje Projeto está na X).
+4. **MATRIZ, Consolidado:** inserir a coluna com o código da métrica na mesma posição e ajustar o filtro do A2 (hoje `filter(Fonte!A2:U;Fonte!B2:B<>"";Fonte!X2:X<>"Implantação")`). As fórmulas genéricas se ajustam sozinhas.
 5. **MATRIZ, Métricas:** inserir a linha da métrica (ID, critério, categoria, cálculo e TRUE/FALSE por plano).
 6. **MATRIZ, Pesos:** inserir a coluna e redistribuir os pesos, para cada plano somar 100%. Categorias: inserir a coluna e só escrever o cabeçalho. A fórmula de cada linha descobre a categoria pela aba Métricas.
 7. **MATRIZ, Matriz:** cadastrar os códigos (`X`, `XB`, `XM`) nas linhas que o `TRANSPOSE` da HS COMPLETO ocupa e estender a tabela `matriz`. A aba Details se monta sozinha.
@@ -255,7 +254,7 @@ Agora o A2 do CONSOLIDADO importa `Consolidado!A1:AZ1000` com o cabeçalho e esc
 9. **AM/TAM, CONSOLIDADO:** inserir a coluna com o mesmo cabeçalho. O import busca pelo nome.
 10. **Conferir:** HealthScore e Ponderado antes e depois, e os OKRs do AM/TAM.
 
-**A09 fora do Health Score (15/10/2026).** "Usuários com E-mail pessoal" saiu de todos os cálculos. Na aba Métricas ela está FALSE para todos os planos, e em Pesos não tem peso. A nota continua sendo calculada no INTERNO (HEALTHSCORE e HS COMPLETO) e aparece no Consolidado, mas não entra no HealthScore, no Ponderado nem nas categorias. Para remover a coluna de vez, siga o roteiro de métrica nova ao contrário.
+**A09 fora do Health Score (15/10/2026).** "Usuários com E-mail pessoal" saiu de todos os cálculos. Na aba Métricas ela está FALSE para todos os planos, e em Pesos não tem peso. No mesmo dia, a métrica foi excluída de vez (ver "A09 excluída e códigos renumerados" abaixo).
 
 **Pesos e Categorias à prova de reorganização (15/10/2026).** Em 15/10, a aba Pesos foi reorganizada: linhas em outra ordem, coluna E02 apagada, colunas de soma Adoção, Configuração e Engajamento acrescentadas, pesos novos. Isso quebrou duas coisas:
 - A busca do Ponderado tinha virado `Pesos!$A$6:$A$30` quando as linhas mudaram de lugar, e só achava o identity_plataform. As outras empresas ficaram com Ponderado 0%.
@@ -269,11 +268,32 @@ Valores em 15/10/2026, com os pesos novos e sem a A09: KRA1 47%, KRT1 58,66%, KR
 
 **Textos da aba Métricas revisados (15/10/2026).** As colunas Cálculo e Observação foram reescritas a partir das fórmulas reais:
 - A06 e A07: disparos ÷ admissões ou demissões da COBERTURA. Antes falavam em "Delta Fired/Hired".
-- A09 a A11: faixas da FAIXAS HS. Antes falavam em "percentil".
+- E-mail pessoal, Desligados com acesso e Desligados que acessaram: faixas da FAIXAS HS. Antes falavam em "percentil".
 - C02: pessoas na folha em grupo específico.
 - E01: fixa em 30%.
 
 O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
+
+**A09 excluída e códigos renumerados (15/10/2026).** A métrica "Usuários com E-mail pessoal" foi apagada de todas as abas, e as métricas seguintes subiram um código:
+
+| Antes | Depois | Métrica |
+|---|---|---|
+| A09 | (apagada) | Usuários com E-mail pessoal |
+| A10 | A09 | Desligados com Acesso |
+| A11 | A10 | Desligados que acessaram |
+| A12 | A11 | Eficiência Workflow Pré-folha |
+
+- **INTERNO:** a coluna da nota saiu da HEALTHSCORE. Na HS COMPLETO saíram a nota e o Bruto e o Máximo (antigas U e V); C01 Bruto e Máximo ficaram em Y e Z, E01 em BA a BC e pré-folha em BD a BF.
+- **MATRIZ:**
+  - Fonte: cabeçalhos refeitos; Projeto está na X.
+  - Consolidado: coluna apagada e filtro do A2 = `filter(Fonte!A2:U;Fonte!B2:B<>"";Fonte!X2:X<>"Implantação")`.
+  - Métricas: linha apagada e IDs renumerados.
+  - Pesos, Categorias e Tendência: coluna apagada e cabeçalhos renumerados.
+  - Matriz: códigos A2:A55 reescritos (tabela `matriz` com 55 linhas). O `C05N` virou `C05B`, e o Bruto de C05 passou a chegar ao Details.
+- **AM/TAM:** coluna apagada do CONSOLIDADO, cabeçalhos renumerados. O import busca pelo nome, então nada mais mudou.
+- **Tendência:** o histórico do e-mail pessoal foi perdido junto com a coluna. Nas semanas anteriores a 15/10, as colunas A09 e A10 já guardam Desligados com acesso e Desligados que acessaram (o rótulo mudou, o dado não).
+- **Conferido em 15/10/2026:** HealthScore, Ponderado e categorias iguais aos de antes (Bionexo 38,56% / 29,74%, Gupy 78,25% / 64,03%, Blip 69,42% / 71,31%). OKRs iguais: KRA1 47%, KRT1 58,66%, KRT2 47,49%.
+- **Fora do escopo:** a Calculadora (oculta) não foi atualizada, e o bloco de e-mail pessoal da FAIXAS HS ficou sem uso.
 
 **Nomes de empresa divergem entre abas** (G4 e Grancursos já são normalizadas na importação da COBERTURA; Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas. `Solfacil-POC` não é a Solfacil.
 
