@@ -445,6 +445,18 @@ O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
 - **Métricas descritas como bônus que têm peso:** A04 (8%) e A11 (4% no IGA Essentials; 1% no IGA Advanced e no Ultimate). Quem não usa leva 0 no Ponderado.
 - **A08 FALSE só no IGA Essentials:** está TRUE no IGA Advanced e no Ultimate.
 
+**Exceção ao botão de offboard: Gran Cursos (15/10/2026).** A Gran Cursos é SAG Advanced, mas faz o offboard pelo workflow, não pelo botão. Antes ela entrava nas duas fontes, e o offboard era contado duas vezes.
+- **Onde fica a exceção:** coluna `Offboard sem botão` da tabela `apoio` (aba APOIO do INTERNO, coluna D). Hoje só tem a Gran Cursos. Para outra empresa na mesma situação, é só acrescentar o nome, igual ao da CARTEIRA.
+- **O que lê a lista:**
+  - a SUCCESS RATE BOTTON tira essas empresas (D2);
+  - "usa botão" passou a ser: plano com `Usa botão offboard = Sim` e empresa fora da lista. Vale no ADOÇÃO SCORE (F, H e Q), no A06 da HEALTHSCORE (J) e no Bruto e Máximo do A03 da HS COMPLETO (I e J).
+- **Efeito na Gran:** A03 = 100% (12 de 12, da SUCCESS RATE WORKFLOW) e A07 = 54,55%. O Ponderado fica em 54,41%. Os OKRs não mudaram (KRA1 46,88%, KRT1 62,1%, KRT2 46,44%).
+- **Atenção:** só tirar a empresa da SUCCESS RATE BOTTON não basta. As outras abas continuam procurando a empresa lá, e A03 e A07 ficam vazios (o Ponderado da Gran caiu para 40,5% enquanto estava assim).
+
+**Tendência, semana 2026 - W42 (sexta 16/10/2026).** Gravada em 15/10, com os valores do Consolidado: 14 empresas, nas linhas 345 a 358. A W41 (09/10) não foi gravada e não dá para reconstruir. Hubla e Sympla (Implantação) ficam fora, porque o Consolidado não as calcula. Para gravar uma semana nova:
+- escreva só Week (B, a data da sexta), Empresa (D) e os valores de H a AI. A, C, E, F, G e AJ são fórmulas que se espalham pela coluna;
+- a coluna E02 (Z) fica vazia.
+
 **Coluna Produto para o Looker (15/10/2026).** Para um filtro de produto valer em todos os gráficos, as tabelas usadas no Looker ganharam uma coluna chamada exatamente `Produto`, sempre a última da tabela. O valor segue o catálogo de planos: SAG, IGA ou "SAG, IGA" (Ultimate).
 - **Pelo Plano da linha** (`XLOOKUP(Plano; planos[Plano]; planos[Produto])`):
   - INTERNO: HEALTHSCORE (AA), HS COMPLETO (BM), WORKFLOWS (AI), SUCCESS RATE WORKFLOW (K), SUCCESS RATE BOTTON (K) e ADOÇÃO SCORE (T);

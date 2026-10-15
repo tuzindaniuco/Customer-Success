@@ -42,6 +42,9 @@ Para conferir os OKRs, leia `'OKR AM'!A2:C2` e `'OKR TAM'!A2:C3`.
   - Produto SAG ou IGA. O Ultimate (`identity_plataform`) tem os dois.
   - Planos: SAG Essentials, SAG Advanced, IGA Essentials, IGA Advanced e Ultimate.
   - O nome do plano só se edita no catálogo do AM/TAM. Tudo se liga pelo Plano ID.
+- **Botão de offboard:**
+  - Quem usa o botão é decidido pelo plano (`Usa botão offboard` no catálogo), menos as empresas da coluna `apoio[Offboard sem botão]`. Hoje a única é a Gran Cursos, que faz o offboard por workflow.
+  - Para mudar uma empresa, edite a lista. Nunca escreva o nome dela numa fórmula.
 - **Implantação:** empresa em implantação fica fora do Consolidado. O status fica na INFO do AM/TAM (Chave 1 = empresa, Chave 2 = status).
 - **Funcionários (denominador de A09 e A10):** coluna Funcionários da FATURA, sem parceiros.
 - **C01:** IGA e Ultimate (Tem IGA no catálogo) = (Onboard + Offboard + Move + Férias e Afastamento + Pré-folha) ÷ 5, com 1 ponto por tipo que tenha workflow. SAG = 0. Mostra quem usa tudo o que a Niuco oferece.
