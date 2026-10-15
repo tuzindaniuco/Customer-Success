@@ -432,6 +432,11 @@ O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
 
 - **OKRs depois:** KRA1 = 46,48%, KRT1 = 62,1% e KRT2 = 45,84%.
 
+**Cobertura (A06 e A07): execuções abortadas não contam como disparo (15/10/2026).**
+- **Onde mudou:** na aba Base por pessoa do relatório Relatórios AM/CX, uma execução cujo status contém "abort" (sem diferenciar maiúsculas) agora é tratada como rejeitada ou aguardando aprovação. A pessoa só conta como disparada se tiver outra execução que rodou. Se não tiver, conta como "Sem disparo".
+- **Efeito hoje:** nenhum. Hoje as abas Cobertura onboard e offboard não têm nenhum status abortado. Os status existentes são Concluído com sucesso, Concluído com erros, Falhou, Em andamento, Em andamento com erros, Rejeitado, Aguardando aprovação, Sem workflow e Anterior ao onboard/offboard.
+- **Eficiência (A02 a A05):** a regra não mudou. Ela usa os deltas de WORKFLOWS, que têm uma coluna própria de Abortados.
+
 **Coluna Média de Pesos e Categorias (15/10/2026).** A Média passou a ser 1 ÷ número de métricas TRUE do plano na aba Métricas, ou seja, quanto cada métrica vale no HealthScore simples. A fórmula busca a coluna do Plano ID na Métricas. Antes, a Pesos contava só as métricas com peso (o SAG Advanced dava 1/9 com 12 métricas TRUE), e a Categorias tinha 5,56% em todas as linhas. Valores: SAG Essentials 12,50% (8 métricas), SAG Advanced 8,33% (12), IGA Essentials 6,67% (15), IGA Advanced 6,25% (16), Ultimate 5,56% (18). É informativa e não entra no cálculo.
 
 **Incoerências entre Pesos e Métricas em 15/10/2026 (em validação).**
