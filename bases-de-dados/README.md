@@ -79,7 +79,7 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 | C03 | Organograma | digitado à mão | nota da HEALTHSCORE / 1 |
 | C04 | Contratos ativos | contratos ativos ÷ conexões NoShadow, sem teto | ativos / NoShadow |
 | C05 | Gastos cadastrados | ativos com gasto ÷ conexões NoShadow | ativos com gasto / NoShadow |
-| C06 | Conexões diretas | conexões diretas ÷ fornecedores homologados (PROVIDERS), por faixas da FAIXAS HS, desde 15/10/2026 | conexões diretas / fornecedores homologados |
+| C06 | Conexões diretas | quantidade de conexões diretas (PROVIDERS), por faixas da FAIXAS HS (versão de 15/10/2026, à tarde) | conexões diretas / 31 (a quantidade que dá 100%) |
 | E01 | Satisfação DM/EB | fixa em 30% para todas as empresas (Consolidado da MATRIZ) | 3 / 10 fixo (colunas BA a BC) |
 | E02 | NPS | removida em 14/10/2026 | removida |
 
@@ -342,6 +342,31 @@ O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
   - Superlogica: 100% → 80%.
   - Jusbrasil: 100% → 80%.
 - **OKRs:** KRA1 foi de 47,42% para 46,9% e KRT1 de 60,8% para 58,16%.
+
+**C06 por quantidade absoluta (15/10/2026, versão atual).** Depois da correção do Make, a C06 deixou de ser proporção e passou a usar a quantidade de conexões diretas. A faixa escolhida foi a proposta A, em degraus de 5. Ela fica nas colunas J e K da FAIXAS HS, e cada faixa vale a partir da quantidade indicada:
+
+| Conexões diretas | Pontos |
+|---|---|
+| 0 a 5 | 15% |
+| 6 a 10 | 30% |
+| 11 a 15 | 45% |
+| 16 a 20 | 60% |
+| 21 a 25 | 75% |
+| 26 a 30 | 90% |
+| 31 ou mais | 100% |
+
+- **HEALTHSCORE:** `XLOOKUP(diretas; 'FAIXAS HS'!J2:J8; 'FAIXAS HS'!K2:K8; 0; -1)`.
+- **HS COMPLETO:** Bruto = conexões diretas (coluna AI). Máximo = `MAX('FAIXAS HS'!J2:J8)` = 31, o início da faixa de 100% (coluna AJ, com formato numérico).
+- **Métricas:** o Cálculo tem as faixas e o exemplo da Blip (20 conexões, nota 60%).
+- **Notas:**
+  - 100%: Mercado Bitcoin (40).
+  - 90%: SolFacil (27), Gran Cursos (28) e Sympla (29).
+  - 75%: Bionexo e OLX (21), G4 (23), Superlogica e Jusbrasil (25).
+  - 60%: Contabilizei (16), Hubla (17), Gupy e Malga (18) e Blip (20).
+  - 30%: Ebanx e LG (10).
+- **OKRs:** KRA1 = 48,14%, KRT1 = 64,35% e KRT2 = 47,49%.
+- **Limitação:** o número absoluto não considera o tamanho do parque. A Bionexo tem 21 diretas para 417 homologados e tira a mesma nota da OLX.
+- **Versão anterior:** a proporção sobre os homologados, descrita acima, foi substituída.
 
 **Coluna Média de Pesos e Categorias (15/10/2026).** A Média passou a ser 1 ÷ número de métricas TRUE do plano na aba Métricas, ou seja, quanto cada métrica vale no HealthScore simples. A fórmula busca a coluna do Plano ID na Métricas. Antes, a Pesos contava só as métricas com peso (o SAG Advanced dava 1/9 com 12 métricas TRUE), e a Categorias tinha 5,56% em todas as linhas. Valores: SAG Essentials 12,50% (8 métricas), SAG Advanced 8,33% (12), IGA Essentials 6,67% (15), IGA Advanced 6,25% (16), Ultimate 5,56% (18). É informativa e não entra no cálculo.
 
