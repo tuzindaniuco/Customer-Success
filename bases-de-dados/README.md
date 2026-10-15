@@ -445,6 +445,19 @@ O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
 - **Métricas descritas como bônus que têm peso:** A04 (8%) e A11 (4% no IGA Essentials; 1% no IGA Advanced e no Ultimate). Quem não usa leva 0 no Ponderado.
 - **A08 FALSE só no IGA Essentials:** está TRUE no IGA Advanced e no Ultimate.
 
+**Coluna Produto para o Looker (15/10/2026).** Para um filtro de produto valer em todos os gráficos, as tabelas usadas no Looker ganharam uma coluna chamada exatamente `Produto`, sempre a última da tabela. O valor segue o catálogo de planos: SAG, IGA ou "SAG, IGA" (Ultimate).
+- **Pelo Plano da linha** (`XLOOKUP(Plano; planos[Plano]; planos[Produto])`):
+  - INTERNO: HEALTHSCORE (AA), HS COMPLETO (BM), WORKFLOWS (AI), SUCCESS RATE WORKFLOW (K), SUCCESS RATE BOTTON (K) e ADOÇÃO SCORE (T);
+  - MATRIZ: Consolidado (AF), Tendência (AJ) e Details (K).
+- **Pela Empresa, na CARTEIRA** (`carteira[Produto]`, mesma regra da LOGINS, que já tinha a coluna): COBERTURA (K) e GRUPOS (G) do INTERNO. Tenants internos (Niuco, CX teste, doc9, Solfacil-POC) ficam em branco.
+- **CONSOLIDADO do AM/TAM:** cabeçalho `Produto` em AG1. O import pelo cabeçalho do A2 passou a ler `$A$1:$AG$1` e traz o Produto do Consolidado da MATRIZ.
+- **Linhas sem plano:** ficam em branco. Na WORKFLOWS, os workflows de empresas fora da carteira têm Plano `#N/A`, e o Produto fica vazio. Empresas antigas com plano Sec Automation aparecem como SAG.
+- **Sem efeito no cálculo:** as colunas ficam depois de tudo o que é lido por posição. A Matriz importa `HS COMPLETO!E2:BL17`, o filtro do Consolidado lê `Fonte!A2:U` e `Z`. HealthScore, Ponderado e OKRs não mudaram (KRA1 46,88%, KRT1 62,1%, KRT2 46,44%).
+- **Fora desta mudança:** as abas brutas gravadas pelo Make (COMPANIES, COMPANIES_HISTORIC, USERS, COMPLIANCE, CONTRATOS, PROVIDERS, GROUPS). A CARTEIRA do AM/TAM já tem a coluna, mas o cabeçalho é `Produto ` (com espaço no fim); a do INTERNO e a da MATRIZ se chamam `Produto`.
+- **No Looker:**
+  - um controle de filtro afeta gráficos de fontes diferentes quando o campo tem o mesmo nome e o mesmo tipo em todas elas. Depois de atualizar os campos de cada fonte, confira se `Produto` está como Texto;
+  - "SAG, IGA" é um valor à parte. Para o filtro SAG incluir o Ultimate, use um controle do tipo "contém" ou um campo calculado.
+
 **Nomes de empresa divergem entre abas** (G4 e Grancursos já são normalizadas na importação da COBERTURA; Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas. `Solfacil-POC` não é a Solfacil.
 
 **Valores inválidos conhecidos.** COMPANIES_HISTORIC e as abas de cobertura do relatório têm datas impossíveis em algumas linhas (ano 1000, 1986, 2027); desconsidere ao calcular.
