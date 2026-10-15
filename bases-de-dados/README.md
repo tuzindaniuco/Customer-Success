@@ -82,6 +82,8 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 | C06 | Conexões diretas | quantidade de conexões diretas (PROVIDERS), por faixas da FAIXAS HS (versão de 15/10/2026, à tarde) | conexões diretas / 31 (a quantidade que dá 100%) |
 | E01 | Satisfação DM/EB | fixa em 30% para todas as empresas (Consolidado da MATRIZ) | 3 / 10 fixo (colunas BA a BC) |
 | E02 | NPS | removida em 14/10/2026 | removida |
+| BON1 | Bônus Portal | eficiência × volumetria das solicitações no portal, 30 dias (aba PORTAL) | positivas / concluídas com resultado (colunas BG a BI) |
+| BON2 | Bônus API | eficiência × volumetria das chamadas à Niuco API, 30 dias (aba API) | chamadas 2xx / total de chamadas (colunas BJ a BL) |
 
 **Semântica da HS Bruto.** `Máximo` é o valor de `Bruto` que levaria a nota a 100%. Nas métricas em que mais é melhor, é o denominador (exemplo: A08, homologados / fornecedores). Em A09 e A10 (códigos atuais), em que menos é melhor, é o teto de infratores para ficar na faixa de 100%: arredondar para baixo (limite da faixa de 100% × funcionários da CARTEIRA). Nesses dois, o desvio é `Bruto - Máximo` (quantos infratores precisam sair); nos demais, `Máximo - Bruto`. Atualizado em 09/10/2026: antes, o Máximo de A09, A10 e A11 era 0 digitado.
 
@@ -367,6 +369,39 @@ O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
 - **OKRs:** KRA1 = 48,14%, KRT1 = 64,35% e KRT2 = 47,49%.
 - **Limitação:** o número absoluto não considera o tamanho do parque. A Bionexo tem 21 diretas para 417 homologados e tira a mesma nota da OLX.
 - **Versão anterior:** a proporção sobre os homologados, descrita acima, foi substituída.
+
+**Categoria Bônus: BON1 (Portal) e BON2 (API) (15/10/2026).** São métricas de recursos específicos. Elas só somam: quem não usa o recurso não perde ponto.
+- **Fonte:**
+  - Abas "Solicitações no portal" e "Niuco API" do relatório Relatórios AM/CX (`1AEZzqHfqMGk2tgXYlke8SdiyB81wJ3tyZCAVKOza-Jk`), atualizadas semanalmente.
+  - No INTERNO, elas são importadas por `IMPORTRANGE` nas abas **PORTAL** e **API**.
+  - A ideia é trocar essa fonte por um banco de dados ligado direto ao Looker, quando houver acesso ao banco da empresa.
+- **BON1 (Portal) = eficiência × volumetria,** últimos 30 dias pela Data de Abertura. As solicitações com Fonte = Importado ficam fora, porque são cargas em lote.
+  - Eficiência = positivas (Conta criada, Acesso revogado, Conta atualizada, Com operação realizada) ÷ (positivas + negativas: Conta não criada, Acesso não revogado, Com operação não realizada).
+  - Volumetria = solicitações ÷ Funcionários da CARTEIRA, pela faixa das colunas M e N da FAIXAS HS: a partir de 10% = 100%; 5% = 75%; 2% = 50%; acima de 0 = 25%.
+- **BON2 (API) = eficiência × volumetria,** últimos 30 dias pela Última chamada de cada linha. A base é consolidada por chave, endpoint e status, então a janela é aproximada.
+  - Eficiência = chamadas com HTTP 2xx ÷ total de chamadas da empresa.
+  - Volumetria = chamadas com sucesso, pela faixa das colunas P e Q da FAIXAS HS: a partir de 1.000 = 100%; 500 = 75%; 100 = 50%; 1 = 25%.
+  - A empresa é localizada pelo nome exato. A LogComex aparece como "LogComex (company não encontrada na base)" e não casa com nenhuma empresa.
+- **Sem uso na janela:** o bônus fica vazio.
+- **INTERNO:**
+  - HEALTHSCORE: colunas W (Bônus Portal) e X (Bônus API). Adoção Automação foi para Y e Projeto para Z.
+  - HS COMPLETO: nota, Bruto e Máximo nas colunas BG a BL. A tabela `hsbruto` foi estendida.
+- **MATRIZ:**
+  - **Fonte:** cabeçalhos refeitos, com Projeto na Z. O filtro do Consolidado é `filter(Fonte!A2:U;Fonte!B2:B<>"";Fonte!Z2:Z<>"Implantação")`.
+  - **Métricas:** a categoria Bônus entrou no dropdown. BON1 e BON2 estão TRUE em todos os planos.
+  - **Pesos:** colunas BON1 e BON2 com 5% em todos os planos, fora do Total. O Total continua `SUM(C:T)` = 100%.
+  - **Categorias:** sem coluna de bônus.
+  - **Média de Pesos e Categorias:** ignora a categoria Bônus.
+  - **Consolidado:** depois de E01 vêm BON1 e BON2. Depois do Ponderado vêm **Bônus** = 5% × BON1 + 5% × BON2 (só se a métrica está TRUE no plano) e **Health Score + Bônus** = Ponderado + Bônus, que pode passar de 100%.
+  - **HealthScore simples, Ponderado e categorias:** continuam lendo só de E até V, então os bônus não entram neles.
+  - **Matriz:** importa `HS COMPLETO!E1:BL` e tem os códigos BON1, BON1B, BON1M, BON2, BON2B e BON2M nas linhas 56 a 61.
+  - **Tendência:** colunas BON1 e BON2 depois de E02, e Bônus e Health Score + Bônus depois do Ponderado, com o histórico em branco.
+- **AM/TAM:** o CONSOLIDADO ganhou as colunas BON1, BON2, Bônus e Health Score + Bônus. O import busca pelo cabeçalho. Os OKRs continuam no Ponderado, na Adoção e na Configuração, sem bônus.
+- **Valores em 15/10/2026:**
+  - LG: BON1 = 90,79% (651 de 717 positivas; 750 solicitações para 812 funcionários), Bônus +4,54, Health Score + Bônus = 64,63%.
+  - OLX: BON2 = 99,59% (1.693 de 1.700 chamadas), Bônus +4,98, Health Score + Bônus = 35,39%.
+  - As chamadas da OLX são de 16 e 17/09 e saem da janela em 17/10, se a base não for atualizada.
+- **OKRs, com os pesos dos planos SAG que o usuário reorganizou no mesmo dia:** KRA1 = 46,61%, KRT1 = 64,35% e KRT2 = 45,62%.
 
 **Coluna Média de Pesos e Categorias (15/10/2026).** A Média passou a ser 1 ÷ número de métricas TRUE do plano na aba Métricas, ou seja, quanto cada métrica vale no HealthScore simples. A fórmula busca a coluna do Plano ID na Métricas. Antes, a Pesos contava só as métricas com peso (o SAG Advanced dava 1/9 com 12 métricas TRUE), e a Categorias tinha 5,56% em todas as linhas. Valores: SAG Essentials 12,50% (8 métricas), SAG Advanced 8,33% (12), IGA Essentials 6,67% (15), IGA Advanced 6,25% (16), Ultimate 5,56% (18). É informativa e não entra no cálculo.
 

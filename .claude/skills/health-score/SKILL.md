@@ -1,6 +1,6 @@
 ---
 name: health-score
-description: Altera, audita e aprimora o Health Score do Customer Care da Niuco (planilhas INTERNO, MATRIZ DE HEALTH SCORE e AM/TAM, e o cenário do Make que alimenta a PROVIDERS). Use sempre que o pedido envolver métrica do Health Score (A01–A11, C01–C06, E01), pesos, categorias, planos, faixas de pontuação, HS Bruto, Consolidado, Matriz/Details, Tendência ou OKRs KRA1/KRT1/KRT2; também para criar, excluir ou renumerar métrica, trocar percentil por faixa, simular nota antes de aplicar, ou investigar valor estranho no score.
+description: Altera, audita e aprimora o Health Score do Customer Care da Niuco (planilhas INTERNO, MATRIZ DE HEALTH SCORE e AM/TAM, e o cenário do Make que alimenta a PROVIDERS). Use sempre que o pedido envolver métrica do Health Score (A01–A11, C01–C06, E01, bônus BON1/BON2), pesos, categorias, planos, faixas de pontuação, HS Bruto, Consolidado, Matriz/Details, Tendência ou OKRs KRA1/KRT1/KRT2; também para criar, excluir ou renumerar métrica, trocar percentil por faixa, simular nota antes de aplicar, ou investigar valor estranho no score.
 ---
 
 # Health Score Niuco
@@ -14,6 +14,7 @@ Este é o roteiro para mexer no Health Score sem quebrar a cadeia de fórmulas. 
 | INTERNO ([NIUCO] DATABASE) | `18yYh-WBgBxrfaDVUVkjOComtjCIZmnevTu29uFVWmAM` | HEALTHSCORE (tabela `healthscore`, sheet 1994005037), HS COMPLETO (`hsbruto`, 1672959028), FAIXAS HS, PROVIDERS (`providers`), WORKFLOWS, SUCCESS RATE WORKFLOW/BOTTON, ADOÇÃO SCORE, GRUPOS, COBERTURA, CARTEIRA, INFO, CATÁLOGO PLANOS (`planos`) |
 | MATRIZ DE HEALTH SCORE | `1GFlzeH7DwUai_8Qg9KrlNbshhCH65M33nnnyZkvTH7Q` | Fonte (IMPORTRANGE de `healthscore`), Consolidado (`metrics`), Métricas (`details`), Pesos, Categorias, Matriz (`matriz`), Details, Tendência, Info, Catálogo Planos, Calculadora (oculta) |
 | AM/TAM DATABASE | `14DEUkFlQrv0AYmc-1sihIwFbWiicBdseMbGPvaGqUjE` | CONSOLIDADO (import da MATRIZ pelo cabeçalho), OKR AM (KRA1), OKR TAM (KRT1, KRT2), CARTEIRA, INFO (fonte única), CATÁLOGO PLANOS (`planos_catalogo`, fonte única de planos) |
+| Relatórios AM/CX | `1AEZzqHfqMGk2tgXYlke8SdiyB81wJ3tyZCAVKOza-Jk` | Solicitações no portal (fonte do BON1), Niuco API (fonte do BON2), Cobertura onboard/offboard/grupos. Atualização semanal. No INTERNO, entram pelas abas PORTAL e API |
 | FINANCEIRO | `1UF5-sbh0xbhyeXkBpG3pOJliPfiO15IRYGnMdBXlAeY` | FATURA (Funcionários, nunca Parceiros nem Licenças Total) |
 
 **Make:** o cenário "[BackOffice -> Sheets] Providers" (4513382, time 71525) grava a PROVIDERS em dias úteis às 06:00. O cenário "[HS-> Sheets] Customers Deals" (4424892) grava a CARTEIRA. Nenhum cenário escreve nas abas INFO.
@@ -53,6 +54,12 @@ Para conferir os OKRs, leia `'OKR AM'!A2:C2` e `'OKR TAM'!A2:C3`.
   - É a quantidade de conexões diretas: 0–5 = 15%, 6–10 = 30%, 11–15 = 45%, 16–20 = 60%, 21–25 = 75%, 26–30 = 90%, 31 ou mais = 100%.
   - Conexão direta é um provider sem `source` (conector nativo) ou com fonte `atlassian`, `gsuite-*` ou `conector-adobe`.
   - Não contam: `manual`, `compliance-*`, `sso-*` e `jumpcloud`.
+- **Bônus (BON1 Portal e BON2 API):**
+  - Nota = eficiência × volumetria (faixas nas colunas M a Q da FAIXAS HS).
+  - Ficam fora da média e dos 100% dos pesos. Têm 5% cada na aba Pesos, fora do Total.
+  - Entram só nas colunas "Bônus" e "Health Score + Bônus" do Consolidado, que pode passar de 100%. Os OKRs não usam bônus.
+  - Bônus vazio não tira ponto.
+  - Bônus novo: código BONn, categoria Bônus na aba Métricas, coluna nova na Pesos (fora do Total) e uma parcela a mais na fórmula da coluna Bônus do Consolidado.
 - **Lista de exclusão do Make:**
   - A conta é feita por `remove(map(11.data; "source"); ...)` no módulo 16 do cenário 4513382.
   - Cliente novo com `sso-google-<nome>` ou outro IdP precisa entrar na lista. Senão, a contagem infla.
@@ -80,7 +87,7 @@ Esse roteiro foi usado na pré-folha:
 1. **HEALTHSCORE:** insira a coluna na ordem certa.
 2. **HS COMPLETO:** acrescente nota, Bruto e Máximo **no fim da tabela**, para não deslocar a Matriz.
 3. **Fonte:** corrija os cabeçalhos e confira onde ficou a coluna Projeto.
-4. **Consolidado:** insira a coluna com o código e ajuste o filtro do A2. Hoje ele é `filter(Fonte!A2:U;Fonte!B2:B<>"";Fonte!X2:X<>"Implantação")`.
+4. **Consolidado:** insira a coluna com o código e ajuste o filtro do A2. Hoje ele é `filter(Fonte!A2:U;Fonte!B2:B<>"";Fonte!Z2:Z<>"Implantação")`, com Projeto na Z desde os bônus.
 5. **Métricas:** insira a linha (ID, critério, categoria, cálculo, observação e TRUE/FALSE por plano).
 6. **Pesos:** insira a coluna e redistribua os pesos para cada plano somar 100%.
 7. **Categorias:** insira a coluna e escreva só o cabeçalho; a fórmula descobre a categoria sozinha.
@@ -114,6 +121,7 @@ A coluna Média é 1 ÷ número de métricas TRUE do plano.
 - **Referências a outras abas:** busque linhas e colunas pelo nome (`XLOOKUP` na coluna inteira e no cabeçalho), nunca por posição. O usuário reorganiza Pesos e apaga colunas.
 - **Imports entre planilhas:** sempre pelo cabeçalho. Import por posição já fez os OKRs lerem a coluna errada.
 - **Cache do `IMPORTRANGE`:** depois de mudar o INTERNO, reescreva `Fonte!A2` para forçar a atualização.
+- **Tabela que precisa crescer:** escrever logo depois do fim de uma tabela não a estende. Use `appendDimension`, se a grade for pequena, e depois `updateTable` com o `range` novo. Para mudar as opções de um dropdown da tabela, use `updateTable` com `columnProperties` completo.
 - **Formato herdado:** coluna nova herda o formato da antiga. Por exemplo, o Máximo saiu como `3100%`; corrija com `repeatCell` e `numberFormat`.
 - **Parênteses:** confira o balanceamento antes de gravar fórmulas longas.
 
@@ -131,6 +139,6 @@ A coluna Média é 1 ÷ número de métricas TRUE do plano.
 - Pendências conhecidas:
   - pesos do IGA Advanced e do SAG Essentials;
   - C01 TRUE ou FALSE e com ou sem peso nos planos SAG;
-  - A04 e A11 como bônus: o usuário quer uma categoria Bônus, sem decisão de teto;
+  - A04 e A11 como bônus: a categoria Bônus já existe (BON1/BON2); falta decidir se A04 e A11 migram para ela;
   - regra de métrica vazia;
   - Calculadora (oculta) desatualizada.
