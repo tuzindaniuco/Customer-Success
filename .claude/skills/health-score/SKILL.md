@@ -54,6 +54,7 @@ Para conferir os OKRs, leia `'OKR AM'!A2:C2` e `'OKR TAM'!A2:C3`.
   - É a quantidade de conexões diretas: 0–5 = 15%, 6–10 = 30%, 11–15 = 45%, 16–20 = 60%, 21–25 = 75%, 26–30 = 90%, 31 ou mais = 100%.
   - Conexão direta é um provider sem `source` (conector nativo) ou com fonte `atlassian`, `gsuite-*` ou `conector-adobe`.
   - Não contam: `manual`, `compliance-*`, `sso-*` e `jumpcloud`.
+- **C02 (grupos):** só conta grupo específico. "Todos os Funcionários" e grupos com a palavra "teste" no nome não contam (regex na aba GRUPOS do INTERNO).
 - **Bônus (BON1 Portal e BON2 API):**
   - Nota = eficiência × volumetria (faixas nas colunas M a Q da FAIXAS HS).
   - Ficam fora da média e dos 100% dos pesos. Têm 5% cada na aba Pesos, fora do Total.

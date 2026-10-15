@@ -404,6 +404,16 @@ O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
   - As chamadas da OLX são de 16 e 17/09 e saem da janela em 17/10, se a base não for atualizada.
 - **OKRs, com os pesos dos planos SAG que o usuário reorganizou no mesmo dia:** KRA1 = 46,61%, KRT1 = 64,35% e KRT2 = 45,62%.
 
+**Grupos de teste não contam na C02 (15/10/2026).** Na aba GRUPOS do INTERNO, um grupo com a palavra "teste" no nome não conta mais como grupo específico, assim como "Todos os Funcionários". Quem só está em grupo de teste conta como sem grupo.
+- **Regra:** a palavra precisa estar separada por espaço, no começo ou no fim do nome, sem diferenciar maiúsculas. Com isso, "Grupo de teste 02", "Grupo Teste", "Teste 1 Cx - Barbara", "Ferias e Afastamento - Teste" e outros saem da conta. Grupos de cargo como "NOVOS-NEGOCIOS-CELULA-TESTE-ANALISTA-PLENO" e "TECNOLOGIA-TESTES-..." continuam contando.
+- **Regex no `REGEXREPLACE`:** `(?i)(^|; )(Todos os Funcionários[^;]*|([^;]* )?teste( [^;]*)?)`.
+- **Efeito:**
+  - Gupy: 403 → 402 com grupo específico. O Yudi Makibara só estava no "Grupo de teste 02". A C02 continua em 82%.
+  - G4 Educação: 572 → 189. As 572 pessoas estavam no "Grupo Teste". A C02 foi de 100% para 33%.
+  - doc9 deixou de ter grupo específico.
+  - Tenants internos (CX teste, Niuco Apresentacao) também mudaram.
+- **OKRs depois:** KRA1 = 46,69%, KRT1 = 63,16% e KRT2 = 45,84%.
+
 **Coluna Média de Pesos e Categorias (15/10/2026).** A Média passou a ser 1 ÷ número de métricas TRUE do plano na aba Métricas, ou seja, quanto cada métrica vale no HealthScore simples. A fórmula busca a coluna do Plano ID na Métricas. Antes, a Pesos contava só as métricas com peso (o SAG Advanced dava 1/9 com 12 métricas TRUE), e a Categorias tinha 5,56% em todas as linhas. Valores: SAG Essentials 12,50% (8 métricas), SAG Advanced 8,33% (12), IGA Essentials 6,67% (15), IGA Advanced 6,25% (16), Ultimate 5,56% (18). É informativa e não entra no cálculo.
 
 **Incoerências entre Pesos e Métricas em 15/10/2026 (em validação).**
