@@ -44,10 +44,7 @@ Para conferir os OKRs, leia `'OKR AM'!A2:C2` e `'OKR TAM'!A2:C3`.
   - O nome do plano só se edita no catálogo do AM/TAM. Tudo se liga pelo Plano ID.
 - **Implantação:** empresa em implantação fica fora do Consolidado. O status fica na INFO do AM/TAM (Chave 1 = empresa, Chave 2 = status).
 - **Funcionários (denominador de A09 e A10):** coluna Funcionários da FATURA, sem parceiros.
-- **C01:**
-  - IGA e Ultimate: (Onboard + Offboard + Move + bônus de no máximo 1, por ABSENT ou IDENTITY_SCREENING) ÷ 4.
-  - SAG: offboard (workflow ou botão) ÷ 1.
-  - O texto da aba Métricas foi editado pelo usuário para "÷ 5". Confirme com ele antes de mudar a fórmula.
+- **C01:** IGA e Ultimate (Tem IGA no catálogo) = (Onboard + Offboard + Move + Férias e Afastamento + Pré-folha) ÷ 5, com 1 ponto por tipo que tenha workflow. SAG = 0. Mostra quem usa tudo o que a Niuco oferece.
 - **Engajamento:** só a E01, fixa em 30% (3/10) até existir nota de satisfação.
 - **Métricas por faixa:** A09 (desligados com acesso), A10 (desligados que acessaram) e C06 (conexões diretas). As faixas ficam editáveis na FAIXAS HS.
 - **C06:**

@@ -414,6 +414,24 @@ O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
   - Tenants internos (CX teste, Niuco Apresentacao) também mudaram.
 - **OKRs depois:** KRA1 = 46,69%, KRT1 = 63,16% e KRT2 = 45,84%.
 
+**C01 ÷ 5 e SAG zerado (15/10/2026, substitui a regra ÷ 4).** A C01 passou a medir quem usa todos os tipos de workflow que a Niuco oferece.
+- **IGA e Ultimate:** o plano tem IGA no catálogo (Tem IGA = Sim). Conta 1 ponto para cada tipo com pelo menos um workflow na WORKFLOWS: Onboard, Offboard, Move, Férias e Afastamento (ABSENT) e Pré-folha (IDENTITY_SCREENING). Nota = pontos ÷ 5. Não há mais bônus nem teto.
+- **SAG:** C01 = 0. O botão de offboard não conta mais. No HS COMPLETO, Bruto = 0 e Máximo = 5 (colunas Y e Z). A coluna Divisor C01 do catálogo deixou de ser usada.
+- **Notas em 15/10/2026:**
+
+  | Empresa | C01 | Tipos que faltam |
+  |---|---|---|
+  | Blip | 5/5 = 100% | nenhum |
+  | Gupy | 3/5 = 60% | Move e Férias e Afastamento |
+  | Contabilizei | 3/5 = 60% | Move e Pré-folha |
+  | LG | 3/5 = 60% | Férias e Afastamento e Pré-folha |
+  | Malga | 2/5 = 40% | Move, Férias e Afastamento e Pré-folha |
+  | G4 Educação | 2/5 = 40% | Move, Férias e Afastamento e Pré-folha |
+  | Hubla | 2/5 = 40% | Move, Férias e Afastamento e Pré-folha |
+  | Sympla | 0/5 | todos |
+
+- **OKRs depois:** KRA1 = 46,48%, KRT1 = 62,1% e KRT2 = 45,84%.
+
 **Coluna Média de Pesos e Categorias (15/10/2026).** A Média passou a ser 1 ÷ número de métricas TRUE do plano na aba Métricas, ou seja, quanto cada métrica vale no HealthScore simples. A fórmula busca a coluna do Plano ID na Métricas. Antes, a Pesos contava só as métricas com peso (o SAG Advanced dava 1/9 com 12 métricas TRUE), e a Categorias tinha 5,56% em todas as linhas. Valores: SAG Essentials 12,50% (8 métricas), SAG Advanced 8,33% (12), IGA Essentials 6,67% (15), IGA Advanced 6,25% (16), Ultimate 5,56% (18). É informativa e não entra no cálculo.
 
 **Incoerências entre Pesos e Métricas em 15/10/2026 (em validação).**
