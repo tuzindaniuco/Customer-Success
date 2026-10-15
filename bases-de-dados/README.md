@@ -71,7 +71,7 @@ Mapeado em 09/10/2026 a partir das fórmulas.
 | A06 | Cobertura onboarding | ADOÇÃO SCORE: disparos ÷ admissões | disparos ONBOARD / movimentações de Admissão da COBERTURA, na janela da nota (desde 14/10/2026) |
 | A07 | Cobertura offboarding | ADOÇÃO SCORE: disparos ÷ demissões | disparos OFFBOARD / movimentações de Demissão da COBERTURA, na janela da nota (desde 14/10/2026) |
 | A08 | Providers homologados | homologados ÷ fornecedores | homologados / fornecedores |
-| A09 | E-mail pessoal | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
+| A09 | E-mail pessoal | **fora do cálculo desde 15/10/2026** (FALSE em todos os planos e sem peso); a coluna continua calculada no INTERNO por faixas da FAIXAS HS | infratores / teto de infratores para 100% |
 | A10 | Desligados com acesso | faixas da FAIXAS HS | infratores / teto de infratores para 100% |
 | A11 | Desligados que acessaram | faixas da FAIXAS HS | infratores / teto (0) |
 | A12 | Eficiência pré-folha | sucesso ÷ iniciados de WORKFLOWS do tipo IDENTITY_SCREENING, últimos 30 dias (a partir de 16/04/2026), mesma regra da A05 | Δ sucesso / Δ iniciados (colunas BG a BI da HS COMPLETO; códigos A12, A12B e A12M na Matriz) |
@@ -254,6 +254,26 @@ Agora o A2 do CONSOLIDADO importa `Consolidado!A1:AZ1000` com o cabeçalho e esc
 8. **MATRIZ, Tendência:** inserir a coluna (histórico em branco).
 9. **AM/TAM, CONSOLIDADO:** inserir a coluna com o mesmo cabeçalho. O import busca pelo nome.
 10. **Conferir:** HealthScore e Ponderado antes e depois, e os OKRs do AM/TAM.
+
+**A09 fora do Health Score (15/10/2026).** "Usuários com E-mail pessoal" saiu de todos os cálculos. Na aba Métricas ela está FALSE para todos os planos, e em Pesos não tem peso. A nota continua sendo calculada no INTERNO (HEALTHSCORE e HS COMPLETO) e aparece no Consolidado, mas não entra no HealthScore, no Ponderado nem nas categorias. Para remover a coluna de vez, siga o roteiro de métrica nova ao contrário.
+
+**Pesos e Categorias à prova de reorganização (15/10/2026).** Em 15/10, a aba Pesos foi reorganizada: linhas em outra ordem, coluna E02 apagada, colunas de soma Adoção, Configuração e Engajamento acrescentadas, pesos novos. Isso quebrou duas coisas:
+- A busca do Ponderado tinha virado `Pesos!$A$6:$A$30` quando as linhas mudaram de lugar, e só achava o identity_plataform. As outras empresas ficaram com Ponderado 0%.
+- As fórmulas da Categorias ficaram com largura diferente da Pesos e deram `#VALUE!`. Adoção, Configuração e Engajamento ficaram em 0%.
+
+Agora, Ponderado, categorias, a aba Categorias e o Peso do Details buscam a linha do plano pela coluna inteira (`Pesos!$A:$A` → `Pesos!$A:$AD`) e o peso pelo nome da métrica no cabeçalho (`Pesos!$A$1:$AD$1`). Mover linhas, inserir colunas ou acrescentar colunas de soma não quebra mais. A Categorias perdeu a coluna E02 e busca o plano pelo Plano ID da própria linha. Pesos e Categorias foram alargadas até a coluna AD.
+
+Regra de consistência: peso em métrica com FALSE na aba Métricas é ignorado. Em 15/10, o IGA Advanced tinha 4% em A08 com A08 FALSE, ou seja, somava 96% na prática. Não afeta ninguém, porque nenhuma empresa está nesse plano.
+
+Valores em 15/10/2026, com os pesos novos e sem a A09: KRA1 47%, KRT1 58,66%, KRT2 47,49%.
+
+**Textos da aba Métricas revisados (15/10/2026).** As colunas Cálculo e Observação foram reescritas a partir das fórmulas reais:
+- A06 e A07: disparos ÷ admissões ou demissões da COBERTURA. Antes falavam em "Delta Fired/Hired".
+- A09 a A11: faixas da FAIXAS HS. Antes falavam em "percentil".
+- C02: pessoas na folha em grupo específico.
+- E01: fixa em 30%.
+
+O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
 
 **Nomes de empresa divergem entre abas** (G4 e Grancursos já são normalizadas na importação da COBERTURA; Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas. `Solfacil-POC` não é a Solfacil.
 
