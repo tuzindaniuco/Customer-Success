@@ -319,6 +319,13 @@ O critério E01 passou a se chamar "Satisfação DM/EB" (antes "DB/EB").
   - 0%: Bionexo e Ebanx.
 - **OKRs:** KRA1 foi de 47% para 47,42% e KRT1 de 58,66% para 60,8%. KRT2 ficou em 47,49%.
 
+**Coluna Média de Pesos e Categorias (15/10/2026).** A Média passou a ser 1 ÷ número de métricas TRUE do plano na aba Métricas, ou seja, quanto cada métrica vale no HealthScore simples. A fórmula busca a coluna do Plano ID na Métricas. Antes, a Pesos contava só as métricas com peso (o SAG Advanced dava 1/9 com 12 métricas TRUE), e a Categorias tinha 5,56% em todas as linhas. Valores: SAG Essentials 12,50% (8 métricas), SAG Advanced 8,33% (12), IGA Essentials 6,67% (15), IGA Advanced 6,25% (16), Ultimate 5,56% (18). É informativa e não entra no cálculo.
+
+**Incoerências entre Pesos e Métricas em 15/10/2026 (em validação).**
+- **TRUE sem peso:** C01, A03 e A07 no SAG Advanced; C01 no SAG Essentials. Entram no HealthScore simples, mas não no Ponderado.
+- **Métricas descritas como bônus que têm peso:** A04 (8%) e A11 (4% no IGA Essentials; 1% no IGA Advanced e no Ultimate). Quem não usa leva 0 no Ponderado.
+- **A08 FALSE só no IGA Essentials:** está TRUE no IGA Advanced e no Ultimate.
+
 **Nomes de empresa divergem entre abas** (G4 e Grancursos já são normalizadas na importação da COBERTURA; Solfacil e SolFacil, JusBrasil e Jusbrasil, ASAAS e Asaas). O `=` do Sheets não diferencia maiúsculas. `Solfacil-POC` não é a Solfacil.
 
 **Valores inválidos conhecidos.** COMPANIES_HISTORIC e as abas de cobertura do relatório têm datas impossíveis em algumas linhas (ano 1000, 1986, 2027); desconsidere ao calcular.
